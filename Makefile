@@ -2,7 +2,7 @@ CXXFLAGS=-O3
 OBJECTS=pixel.o 
 BINARIES=pixel
 
-PIXEL_LIBDIR=../lib
+PIXEL_LIBDIR=./include
 
 RGB_INCDIR=matrix/include
 RGB_LIBDIR=matrix/lib
@@ -15,7 +15,7 @@ LDFLAGS+=-L$(RGB_LIBDIR) -l$(RGB_LIBRARY_NAME) -lrt -lm -lpthread
 
 all : pixel
 
-pixel : $(OBJECTS) $(RGB_LIBRARY) $(PIXEL_LIBDIR)
+pixel : $(OBJECTS) $(PIXEL_LIBDIR) $(RGB_LIBRARY) 
 	$(CXX) $(CXXFLAGS) $(OBJECTS) -o $@ $(LDFLAGS)
 
 $(RGB_LIBRARY): FORCE
@@ -28,7 +28,7 @@ pixel.o : pixel.cc
 
 clean:
 	rm -f $(OBJECTS) $(BINARIES)
-	$(MAKE) -C $(RGB_LIBDIR) $(PIXEL_LIBDIR) clean
+	$(MAKE) -C $(RGB_LIBDIR) clean
 
 
 FORCE:
