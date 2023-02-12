@@ -1,122 +1,117 @@
 // using to difne color definitions
 #include <string>
 #include <iostream>
+#include <math.h>
+#include <algorithm>
 // #include "color.h"
 
-struct rgb
-{
-    float r;
-    float g;
-    float b;
-};
+namespace color {
+    struct rgb
+    {
+        float r;
+        float g;
+        float b;
+    };
 
-struct hsv
-{
-    float h;
-    float s;
-    float v;
-};
+    struct hsv
+    {
+        float h;
+        float s;
+        float v;
+    };
 
-rgb hsv_to_rgb(hsv in) {
-    rgb out;
-    float hh, p, q, t, ff;
-    long i;
+    rgb hsv_to_rgb(hsv in) {
+        float c = in.v * in.s;
+        float x = c * (1 - abs(fmod(in.h / 60.0, 2) - 1));
+        float m = in.v - c;
 
-    if(in.s <= 0.0) {       // < is bogus, just shuts up warnings
-        out.r = in.v;
-        out.g = in.v;
-        out.b = in.v;
+        float r = 0;
+        float g = 0;
+        float b = 0;
+
+        if(in.h >= 0 && in.h < 60) {
+            r = c;
+            g = x;
+            b = 0;
+        } else if(in.h >= 60 && in.h < 120) {
+            r = x;
+            g = c;
+            b = 0;
+        } else if(in.h >= 120 && in.h < 180) {
+            r = 0;
+            g = c;
+            b = x;
+        } else if(in.h >= 180 && in.h < 240) {
+            r = 0;
+            g = x;
+            b = c;
+        } else if(in.h >= 240 && in.h < 300) {
+            r = x;
+            g = 0;
+            b = c;
+        } else if(in.h >= 300 && in.h < 360) {
+            r = c;
+            g = 0;
+            b = x;
+        }
+
+        rgb out = {(r + m) * 255, (g + m) * 255, (b + m) * 255};
+
         return out;
     }
-    hh = in.h;
-    if(hh >= 360.0) hh = 0.0;
-    hh /= 60.0;
-    i = (long)hh;
-    ff = hh - i;
-    p = in.v * (1.0 - in.s);
-    q = in.v * (1.0 - (in.s * ff));
-    t = in.v * (1.0 - (in.s * (1.0 - ff)));
 
-    switch(i) {
-    case 0:
-        out.r = in.v;
-        out.g = t;
-        out.b = p;
-        break;
-    case 1:
-        out.r = q;
-        out.g = in.v;
-        out.b = p;
-        break;
-    case 2:
-        out.r = p;
-        out.g = in.v;
-        out.b = t;
-        break;
+    hsv rgb_to_hsv(rgb in) {
+        
+        rgb normalized = {in.r / 255.0, in.g / 255.0, in.b / 255.0};
+        float cmax = std::max(normalized.r, std::max(normalized.g, normalized.b));
+        float cmin = std::min(normalized.r, std::min(normalized.g, normalized.b));
+        float diff = cmax - cmin;
 
-    case 3:
-        out.r = p;
-        out.g = q;
-        out.b = in.v;
-        break;
-    case 4:
-        out.r = t;
-        out.g = p;
-        out.b = in.v;
-        break;
-    case 5:
-    default:
-        out.r = in.v;
-        out.g = p;
-        out.b = q;
-        break;
-    }
-    return out;     
-}
+        hsv out = {float(-1.0), float(-1.0)};
 
-hsv rgb_to_hsv(rgb in) {
-    hsv out;
-    float min, max, delta;
+        if(!diff) {
+            out.h = 0;
+        } else if(cmax == normalized.r) {
+            out.h = fmod((60 * ((normalized.g - normalized.b) / diff) + 360), 360);
+        } else if(cmax == normalized.g) {
+            out.h = fmod((60 * ((normalized.b - normalized.r) / diff) + 120), 360);
+        } else if(cmax == normalized.b) {
+            out.h = fmod((60 * ((normalized.r - normalized.g) / diff) + 240), 360);
+        }
 
-    min = in.r < in.g ? in.r : in.g;
-    min = min  < in.b ? min  : in.b;
+        if(cmax == 0) {
+            out.s = 0;
+        } else {
+            out.s = (diff / cmax) * 100.0;
+        }
 
-    max = in.r > in.g ? in.r : in.g;
-    max = max  > in.b ? max  : in.b;
+        out.v = cmax * 100;
 
-    out.v = max;                                // v
-    delta = max - min;
-    if( max > 0.0 ) { // NOTE: if Max is == 0, this divide would cause a crash
-        out.s = (delta / max);                  // s
-    } else {
-        // if max is 0, then r = g = b = 0              
-        // s = 0, v is undefined
-        out.s = 0.0;
-        out.h = -1.0;                            // its now undefined
         return out;
+
     }
-    if( in.r >= max )                           // > is bogus, just keeps compilor happy
-        out.h = ( in.g - in.b ) / delta;        // between yellow & magenta
-    else
-    if( in.g >= max )
-        out.h = 2.0 + ( in.b - in.r ) / delta;  // between cyan & yellow
-    else
-        out.h = 4.0 + ( in.r - in.g ) / delta;  // between magenta & cyan
 
-    out.h *= 60.0;                              // degrees
+    //     r = int(r * 255)
+    // g = int(g * 255)
+    // b = int(b * 255)
+    // return f"\033[38;2;{r};{g};{b}m"
 
-    if( out.h < 0.0 )
-        out.h += 360.0;
+    std::string rgb_to_ansi(rgb in) {
+        int r = int(in.r);
+        int g = int(in.g);
+        int b = int(in.b);
+        return "\033[38;2;" + std::to_string(r) + ";" + std::to_string(g) + ";" + std::to_string(b) + "m";}
 
-    return out;
 }
 
-
-std::string rgb_to_ansi(rgb in) {
-    // int r = int(r * 255);
-    // int g = int(g * 255);
-    // int b = int(b * 255);
-
-    return "\033[38;2;" + std::to_string((int)in.r*255) + ";" + std::to_string(int(in.g*255)) + ";" + std::to_string(int(in.b*255)) + "m";
-}
-
+// int main() {
+//     color::rgb rgb;
+//     rgb.r = 0;
+//     rgb.g = 0;
+//     rgb.b = 255;
+//     color::hsv out = color::rgb_to_hsv(rgb);
+//     std::cout << out.h << std::endl;
+//     std::cout << out.s << std::endl;
+//     std::cout << out.v << std::endl;
+//     return 0;
+// }

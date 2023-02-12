@@ -1,13 +1,13 @@
-OBJECTS=state.o color.o
-BINARIES=state color
+OBJECTS=statemachine.o color.o wave.o
+BINARIES=statemachine
 
-HEADERSDIR=../include
+HEADERSDIR=../include 
 
 CXXFLAGS=-I$(HEADERSDIR)
 
-all : state
+all : statemachine
 
-state : $(OBJECTS)
+statemachine : $(OBJECTS)
 	$(CXX) $(CXXFLAGS) $(OBJECTS) -o $@
 
 clean :
