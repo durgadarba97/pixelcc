@@ -62,9 +62,3 @@
 //   return 0;
 // }
 
-#include "statemachine.h"
-
-int main() {
-    StateMachine statemachine;
-    statemachine.generateFrames();
-}
