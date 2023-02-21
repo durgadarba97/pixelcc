@@ -1,4 +1,4 @@
-#ifdef STATE_H
+#ifndef STATE_H
 #define STATE_H
 
 class State {

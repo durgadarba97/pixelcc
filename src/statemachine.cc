@@ -14,9 +14,10 @@ using namespace color;
 
 StateMachine::StateMachine() { 
     float grid[64][64];
-    Wave wave;
 
-    vector <State*> possibleStates = {&wave};
+    std::vector <State*> possibleStates;
+    Wave wave;
+    possibleStates.push_back(&wave);
     
 
     initializeWeightedGrid();

@@ -1,4 +1,4 @@
-OBJECTS=statemachine.o color.o wave.o
+OBJECTS=statemachine.o color.o state.o wave.o
 BINARIES=statemachine
 
 HEADERSDIR=../include 
