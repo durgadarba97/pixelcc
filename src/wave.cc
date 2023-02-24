@@ -61,13 +61,6 @@ void Wave::wave(float grid[64][64]) {
             }
         }
     }
-
-
-    for(int i = 0; i < 64; i++) {
-        delete[] lastGrid[i];
-    }
-
-    delete[] lastGrid;
 }
 
 void Wave::generateFrames(float grid[64][64]) {

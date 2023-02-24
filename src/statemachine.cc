@@ -15,9 +15,13 @@ using namespace color;
 StateMachine::StateMachine() { 
     float grid[64][64];
 
-    std::vector <State*> possibleStates;
+    std::vector <State> possibleStates;
     Wave wave;
-    possibleStates.push_back(&wave);
+    possibleStates.push_back(wave);
+    
+    // create a queue of frames where each frame is a 2d array of 64x64 floats
+    std::queue<float[64][64]> frames;
+
     
 
     initializeWeightedGrid();
@@ -44,15 +48,33 @@ void printarray(float array[64][64]) {
 }
 
 void StateMachine::generateFrames() {
-    for(int i = 0; i < 1000; i++) {
-        // printarray(grid);
-        std::cout << "Hello" << std::endl;
-        // print();
+    int t = 0;
+    while(t < 100)
+    {
+        if(frames.size() >= 100) {
+            continue;
+        }  
+
+        // gebnerate a new frame from wave and append it to the queue
+        possibleStates[0].generateFrames(grid);
+        frames.push(grid);
+        t += 1;
     }
+
+    for(int i = 0; i < 100; i++) {
+        std::cout << "frame " << i << std::endl;
+        printarray(frames.front());
+        frames.pop();
+    }
+    
+}
+
+std::queue<float[64][64]> StateMachine::getFrames() {
+    return frames;
 }
 
 
-void StateMachine::print(int t) {
+void StateMachine::print() {
 
     // clear the screen
     std::cout << "\033[0;0H" << std::endl;
