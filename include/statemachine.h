@@ -9,15 +9,18 @@
 class StateMachine {
     private :
         float grid[64][64];
-        std::queue<float[64][64]> frames;
-        std::vector <State> possibleStates;
+        // std::queue<Display> frames;
+        std::vector<float[64][64]> frames;
+        std::vector<State> possibleStates;
 
     public :
         StateMachine();
         void print();
         void initializeWeightedGrid();
         void generateFrames();
-        std::queue<float[64][64]> getFrames();
+        
+        void clear(); 
+        // std::queue<Display> getFrames();
 
 };
 
