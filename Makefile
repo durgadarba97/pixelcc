@@ -102,6 +102,8 @@ TEST_OBJECTS = test.o
 PIXEL_BINARIES = pixel
 TEST_BINARIES = test
 
+RGB_INCDIR=matrix/include
+
 LDFLAGS+=-L$(RGB_LIBDIR) -l$(RGB_LIBRARY_NAME) -lrt -lm -lpthread
 
 $(RGB_LIBRARY):
