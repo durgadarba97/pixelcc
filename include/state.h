@@ -1,14 +1,13 @@
 #ifndef STATE_H
 #define STATE_H
 
-// struct Display {
-//     float grid[64][64];
-// };
+#include <vector>
 
 class State {
     public:
         State();
-        void generateFrames(float grid[64][64]);
+        ~State();
+        void generateFrames(std::vector<std::vector<float> > &frames);
 };
 
 #endif // STATE_H

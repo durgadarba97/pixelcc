@@ -4,7 +4,7 @@
 #include <cmath>
 #include <queue>
 #include <vector>
-
+#include <typeinfo>
 #include "color.h"
 #include "statemachine.h"
 #include "wave.h"
@@ -16,29 +16,45 @@ StateMachine::StateMachine() {
 
     // create a vector of possible states
     std::vector <State> possibleStates;
-    Wave wave;
+    Wave wave = Wave();
+    std::cout << "wave created" << std::endl;
     possibleStates.push_back(wave);
     
+    std::cout << "wave pushed" << std::endl;
     // create a queue of frames where each frame is a 2d array of 64x64 floats
-    float grid[64][64];
+    std::vector<std::vector<float> > grid;
 
-    std::vector<float[64][64]> frames;
+    std::cout << "grid created" << std::endl;
+    std::queue<std::vector<std::vector<float> > > frameQueue = std::queue<std::vector<std::vector<float> > >();
 
-    initializeWeightedGrid();
+    std::cout << "frameQueue created" << std::endl;
+    // initializeWeightedGrid();
     
+    std::cout << "grid initialized" << std::endl;
 }
 
+
+StateMachine::~StateMachine() {
+}
+
+// There seems to be a segfault in this function. I'm not sure why.
+// I'm not sure if it's because of the way I'm passing the grid to the
+// wave class or if it's because of the way I'm initializing the grid.
+//  q: why am I getting a segfault in this function?
+//  a: I was passing the grid by reference, but I was also passing it to the
 void StateMachine::initializeWeightedGrid() {
+    // initialize the grid with random values
     srand(unsigned(time(0)));
 
+    // 
     for(int y = 0; y < 64; y++) {
         for(int x = 0; x < 64; x++) {
-            grid[y][x] = (float)rand() / ((float)RAND_MAX+1.0);
+            this->grid[y][x] = (float)rand() / ((float)RAND_MAX+1.0);
         }
     }
 }
 
-void printarray(float array[64][64]) {
+void printarray(std::vector<std::vector<float> > & array) {
     for(int y = 0; y < 64; y++) {
         for(int x = 0; x < 64; x++) {
             std::cout << array[y][x] << " ";
@@ -51,31 +67,28 @@ void StateMachine::generateFrames() {
     int t = 0;
     while(t < 100)
     {
-        if(frames.size() >= 100) {
+        if(frameQueue.size() >= 100) {
             continue;
         }  
 
         // gebnerate a new frame from wave and append it to the queue
-        possibleStates[0].generateFrames(grid);
-        frames.push_back(grid);
+        // possibleStates[0].generateFrames(grid);
+        frameQueue.push(grid);
         t += 1;
     }
 
     for(int i = 0; i < 100; i++) {
         std::cout << "frame " << i << std::endl;
-        printarray(frames.front());
-        frames.erase(frames.begin());
+        
+        // print the frame
+        print(&frameQueue.front());
+        frameQueue.pop();
 
     }
     
 }
 
-// std::queue<Display> StateMachine::getFrames() {
-//     return frames;
-// }
-
-
-void StateMachine::print() {
+void StateMachine::print(std::vector<std::vector<float> > * array) {
 
     // clear the screen
     std::cout << "\033[0;0H" << std::endl;
@@ -83,7 +96,7 @@ void StateMachine::print() {
     // print the grid
     for(int y = 0; y < 64; y++) {
         for(int x = 0; x < 64; x++) {
-            float v = grid[y][x]; 
+            float v = (*array)[y][x];
 
             // hsv huesatvalue;
             // huesatvalue.h = powf(v, 2) * 0.2 + 0.2;
@@ -110,15 +123,11 @@ void StateMachine::print() {
         
     }
 }
-void StateMachine::clear() {
-    for (auto& frame : frames) {
-        delete[] frame;
-    }
-    frames.clear();
-}
 
 
 // int main() {
+//         std::cout << "hello world" << std::endl;
+
 //     StateMachine s;
 //     // hsv h = {240, 1, 1};
 //     // std::cout << rgb_to_ansi(hsv_to_rgb(h)) << "██" << std::endl;

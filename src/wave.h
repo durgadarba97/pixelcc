@@ -8,8 +8,9 @@
 class Wave : public State {
     public:
         Wave();
-        void wave(float grid[64][64]);
-        void generateFrames(float grid[64][64]);
+        ~Wave();
+        void wave(std::vector<std::vector<float> > &grid);
+        void generateFrames(std::vector<std::vector<float> > &grid);
 };
 
 

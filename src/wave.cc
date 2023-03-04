@@ -6,13 +6,14 @@
 
 
 Wave::Wave(){}
+Wave::~Wave(){}
 
 float randFloat(float min, float max) {
     return min + (rand() * (max-min) / RAND_MAX);
 }
 
 // Copies the grid and returns a pointer to the copy 2d array
-float** copyGrid(float grid[64][64]) {
+float** copyGrid(std::vector<std::vector<float> > &grid) {
     float** copy = new float*[64];
     for(int i = 0; i < 64; i++) {
         copy[i] = new float[64];
@@ -23,7 +24,7 @@ float** copyGrid(float grid[64][64]) {
     return copy;
 }
 
-void Wave::wave(float grid[64][64]) {
+void Wave::wave(std::vector<std::vector<float> > &grid) {
     float** lastGrid = copyGrid(grid);
 
     for(int i = 0; i < 64; i++) {
@@ -61,8 +62,13 @@ void Wave::wave(float grid[64][64]) {
             }
         }
     }
+
+    for(int i = 0; i < 64; i++) {
+        delete[] lastGrid[i];
+    }
+
 }
 
-void Wave::generateFrames(float grid[64][64]) {
+void Wave::generateFrames(std::vector<std::vector<float> > & grid) {
     wave(grid);
 }

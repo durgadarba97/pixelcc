@@ -1,12 +1,14 @@
-#include <iostream>
-
 #include "state.h"
-
+#include <queue>
+#include <vector>
 
 State::State() {
-    // std::cout << "Base Class" << std::endl;
-};
+}
+State::~State() {
+}
 
-void State::generateFrames(float grid[64][64]) {
-    // std::cout << "Base Class" << std::endl;
-};
+void State::generateFrames(std::vector<std::vector<float> > &frames){
+
+}
+
+
