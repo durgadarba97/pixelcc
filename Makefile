@@ -117,7 +117,7 @@ test : $(TEST_OBJECTS) $(SOURCE_OBJECTS)
 
 test.o : test.cc 
 
-pixel : $(SOURCE_OBJECTS) $(RGB_LIBRARY)
+pixel : $(SOURCE_OBJECTS) pixel.o $(RGB_LIBRARY)
 	$(CXX) $(CXXFLAGS) $(SOURCE_OBJECTS) -o $@ $(LDFLAGS)
 
 
