@@ -64,7 +64,13 @@ int wave( Canvas *canvas) {
         // draw the frame
         for(int y = 0; y < 64; y++) {
             for(int x = 0; x < 64; x++) {
-                canvas->SetPixel(x, y, 255, 255, 255);
+                // get the grid value and convert it to a color simialr to the state machine
+                float value = grid[y][x];
+                float r = 255 * powf(value, 4 + (value * 0.5)) * cosf(value);
+                float g = 255 * powf(value, 3 + (value * 0.5)) * sinf(value);
+                float b = 255 * powf(value, 2 + (value * 0.5));
+                
+                canvas->SetPixel(x, y, r, g, b);
             }
         }
         usleep(1000000);
