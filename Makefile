@@ -76,7 +76,7 @@
 
 
 # Compiler flags
-CXXFLAGS = -Wall -I./include -O3
+CXXFLAGS = -Wall -O3 -I./include -I./src
 
 # Source files
 PIXEL_SOURCES = pixel.cc
@@ -110,19 +110,29 @@ $(RGB_LIBRARY):
 	$(MAKE) -C $(RGB_LIBDIR)
 
 testwave : testwave.o src/wave.o src/state.o $(RGB_LIBRARY)
-	$(CXX) -I$(RGB_INCDIR) $(CXXFLAGS) testwave.o src/wave.o src/state.o -o $@ $(LDFLAGS)
+	$(CXX) $(CXXFLAGS) -I$(RGB_INCDIR) testwave.o src/wave.o src/state.o -o $@ $(LDFLAGS)
 
 testwave.o : testwave.cc
 
 test : $(TEST_OBJECTS) $(SOURCE_OBJECTS) 
-	$(CXX) -I$(RGB_INCDIR) $(CXXFLAGS) $(TEST_OBJECTS) $(SOURCE_OBJECTS) -o $@
+	$(CXX) $(CXXFLAGS) $(TEST_OBJECTS) $(SOURCE_OBJECTS) -o $@
 
 test.o : test.cc 
 
-pixel : $(SOURCE_OBJECTS) pixel.o $(RGB_LIBRARY)
-	$(CXX) -I$(RGB_INCDIR) $(CXXFLAGS) $(SOURCE_OBJECTS) -o $@ $(LDFLAGS)
+# pixel : $(SOURCE_OBJECTS) pixel.o $(RGB_LIBRARY_NAME)
+# 	$(CXX) $(CXXFLAGS) -I$(RGB_INCDIR) $(SOURCE_OBJECTS) -o $@ $(LDFLAGS)
+
+pixel : pixel.o $(RGB_LIBRARY) $(SOURCE_OBJECTS)
+	$(CXX)  $(CXXFLAGS) pixel.o $(SOURCE_OBJECTS) -o $@ $(LDFLAGS)
+	
 
 pixel.o : pixel.cc
+
+%.o : %.cc
+	$(CXX) -I$(RGB_INCDIR) $(CXXFLAGS) -c -o $@ $<
+
+FORCE:
+.PHONY: FORCE
 
 clean :
 	rm -f $(TEST_OBJECTS) $(TEST_BINARIES) $(PIXEL_BINARIES) $(SOURCE_OBJECTS)

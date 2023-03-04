@@ -4,16 +4,26 @@
 // and the wave state class.
 #include <iostream>
 #include <vector>
+#include <unistd.h>
+#include <cmath>
+#include <signal.h>
+
 #include "src/wave.h"
 #include "led-matrix.h"
+
 
 using namespace std;
 using namespace rgb_matrix;
 
+volatile bool interrupt_received = false;
+static void InterruptHandler(int signo) {
+  interrupt_received = true;
+}
+
+
 int wave( Canvas *canvas) {
     Wave wave = Wave();
 
-    initializeCanvas();
     vector <vector<float> > grid;
 
 
@@ -41,7 +51,7 @@ int wave( Canvas *canvas) {
     while(true) {
 
         // get the next frame
-        vector<vector<float> > frame = wave.getNextFrame();
+        wave.generateFrames(grid);
 
         // print the frame
         // for(int y = 0; y < 64; y++) {
@@ -62,7 +72,7 @@ int wave( Canvas *canvas) {
     cout << "wave created" << endl;
 }
 
-int main() {
+int main(int argc, char *argv[]) {
     RGBMatrix::Options defaults;
     defaults.hardware_mapping = "adafruit-hat-pwm";  // or e.g. "adafruit-hat"
     defaults.rows = 64;
@@ -75,6 +85,8 @@ int main() {
     // It is always good to set up a signal handler to cleanly exit when we
     // receive a CTRL-C for instance. The DrawOnCanvas() routine is looking
     // for that.
+    // q: why cant the compiler find this function?
+    // a: because it is a static function in the pixel.cc file
     signal(SIGTERM, InterruptHandler);
     signal(SIGINT, InterruptHandler);
 
