@@ -107,6 +107,11 @@ LDFLAGS+=-L$(RGB_LIBDIR) -l$(RGB_LIBRARY_NAME) -lrt -lm -lpthread
 $(RGB_LIBRARY):
 	$(MAKE) -C $(RGB_LIBDIR)
 
+testwave : testwave.o src/wave.o src/state.o $(RGB_LIBRARY)
+	$(CXX) $(CXXFLAGS) testwave.o src/wave.o src/state.o -o $@ $(LDFLAGS)
+
+testwave.o : testwave.cc
+
 test : $(TEST_OBJECTS) $(SOURCE_OBJECTS) 
 	$(CXX) $(CXXFLAGS) $(TEST_OBJECTS) $(SOURCE_OBJECTS) -o $@
 
@@ -115,7 +120,8 @@ test.o : test.cc
 pixel : $(SOURCE_OBJECTS) $(RGB_LIBRARY)
 	$(CXX) $(CXXFLAGS) $(SOURCE_OBJECTS) -o $@ $(LDFLAGS)
 
+
 clean :
-	rm -f $(TEST_OBJECTS) $(OBJECT_FILES) $(TEST_BINARIES) $(PIXEL_BINARIES) 
+	rm -f $(TEST_OBJECTS) $(TEST_BINARIES) $(PIXEL_BINARIES) $(SOURCE_OBJECTS)
 	$(MAKE) -C $(RGB_LIBDIR) clean
 	
