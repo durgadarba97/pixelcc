@@ -88,14 +88,6 @@ int main(int argc, char *argv[]) {
     if (canvas == NULL)
     return 1;
 
-    // It is always good to set up a signal handler to cleanly exit when we
-    // receive a CTRL-C for instance. The DrawOnCanvas() routine is looking
-    // for that.
-    // q: why cant the compiler find this function?
-    // a: because it is a static function in the pixel.cc file
-    signal(SIGTERM, InterruptHandler);
-    signal(SIGINT, InterruptHandler);
-
     wave(canvas);    // Using the canvas.
     return 0;
 
