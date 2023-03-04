@@ -115,13 +115,14 @@ testwave : testwave.o src/wave.o src/state.o $(RGB_LIBRARY)
 testwave.o : testwave.cc
 
 test : $(TEST_OBJECTS) $(SOURCE_OBJECTS) 
-	$(CXX) $(CXXFLAGS) $(TEST_OBJECTS) $(SOURCE_OBJECTS) -o $@
+	$(CXX) -I$(RGB_INCDIR) $(CXXFLAGS) $(TEST_OBJECTS) $(SOURCE_OBJECTS) -o $@
 
 test.o : test.cc 
 
 pixel : $(SOURCE_OBJECTS) pixel.o $(RGB_LIBRARY)
 	$(CXX) -I$(RGB_INCDIR) $(CXXFLAGS) $(SOURCE_OBJECTS) -o $@ $(LDFLAGS)
 
+pixel.o : pixel.cc
 
 clean :
 	rm -f $(TEST_OBJECTS) $(TEST_BINARIES) $(PIXEL_BINARIES) $(SOURCE_OBJECTS)
