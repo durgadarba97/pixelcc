@@ -73,7 +73,9 @@ int wave( Canvas *canvas) {
                 canvas->SetPixel(x, y, r, g, b);
             }
         }
-        usleep(1000000);
+
+        // 30 frames per second
+        usleep(33333);
     }
     cout << "wave created" << endl;
 }
