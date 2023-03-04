@@ -108,7 +108,7 @@ $(RGB_LIBRARY):
 	$(MAKE) -C $(RGB_LIBDIR)
 
 testwave : testwave.o src/wave.o src/state.o $(RGB_LIBRARY)
-	$(CXX) $(CXXFLAGS) testwave.o src/wave.o src/state.o -o $@ $(LDFLAGS)
+	$(CXX) -I$(RGB_INCDIR) $(CXXFLAGS) testwave.o src/wave.o src/state.o -o $@ $(LDFLAGS)
 
 testwave.o : testwave.cc
 
@@ -118,7 +118,7 @@ test : $(TEST_OBJECTS) $(SOURCE_OBJECTS)
 test.o : test.cc 
 
 pixel : $(SOURCE_OBJECTS) pixel.o $(RGB_LIBRARY)
-	$(CXX) $(CXXFLAGS) $(SOURCE_OBJECTS) -o $@ $(LDFLAGS)
+	$(CXX) -I$(RGB_INCDIR) $(CXXFLAGS) $(SOURCE_OBJECTS) -o $@ $(LDFLAGS)
 
 
 clean :
