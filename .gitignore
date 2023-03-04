@@ -1,4 +1,4 @@
-.vscode/# Prerequisites
+.vscode/
 *.d
 
 # Compiled Object files
@@ -31,5 +31,4 @@
 *.out
 *.app
 
-# Other files
-www.learncpp.com
+.DS_Store
