@@ -1,47 +1,36 @@
-// this will implement the spotify submodule from ../spotify.h
-// from the readme file: https://github.com/spotify/spotify-json/blob/master/README.md
+// using the libcurl and the json libraries to hit the spotify api. 
+// I feel like this is going to suck ...
+
 #include <iostream>
-#include <map>
 #include <string>
+#include <curl/curl.h>
+#include <jsoncpp/json/json.h>
 
-#include <spotify/json.hpp>
-
-using namespace spotify::json;
-
-struct Track {
-  std::string uri;
-  std::string uid;
-  std::map<std::string, std::string> metadata;
-};
-
-namespace spotify {
-namespace json {
-
-// Specialize spotify::json::default_codec_t to specify default behavior when
-// encoding and decoding objects of certain types.
-template <>
-struct default_codec_t<Track> {
-  static object_t<Track> codec() {
-    auto codec = object<Track>();
-    codec.required("uri", &Track::uri);
-    codec.optional("uid", &Track::uid);
-    codec.optional("metadata", &Track::metadata);
-    return codec;
-  }
-};
-
-}  // namespace json
-}  // namespace spotify
+using namespace std;
 
 int main() {
-  const auto parsed_track = decode<Track>(R"({ "uri": "spotify:track:xyz", "metadata": { "a": "b" } })");
-  std::cout << "Parsed track with uri " << parsed_track.uri << std::endl;
+    CURL *curl;
+    CURLcode res;
+    string readBuffer;
 
-  Track track;
-  track.uri = "spotify:track:abc";
-  track.uid = "a-uid";
-  const auto json = encode(track);
-  std::cout << "Encoded the track into " << json << std::endl;
+    curl = curl_easy_init();
+    if(curl) {
+        curl_easy_setopt(curl, CURLOPT_URL, "https://api.spotify.com/v1/search?q=weezer&type=artist");
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
+        res = curl_easy_perform(curl);
+        curl_easy_cleanup(curl);
+    }
 
-  return 0;
+    Json::Value root;
+    Json::Reader reader;
+    bool parsingSuccessful = reader.parse(readBuffer, root);
+    if(!parsingSuccessful) {
+        cout << "Failed to parse JSON" << endl;
+        return 1;
+    }
+
+    const Json::Value artists = root["artists"];
+    cout << artists << endl;
+    return 0;
 }
