@@ -60,6 +60,7 @@ int main(int argc, char *argv[]) {
     defaults.hardware_mapping = "adafruit-hat-pwm";  // or e.g. "adafruit-hat"
     defaults.rows = 64;
     defaults.cols = 64;
+    defaults.brightness = 75;
 
     Canvas *canvas = RGBMatrix::CreateFromFlags(&argc, &argv, &defaults);
     if (canvas == NULL)
