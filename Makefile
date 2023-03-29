@@ -1,16 +1,16 @@
 # Compiler flags
-CXXFLAGS = -Wall -O3 -I./include -I./src
+CXXFLAGS = -Wall -O3 -I./src -Ijson/include -std=c++20 -g
 
 # Source files
 PIXEL_SOURCES = pixel.cc
-TEST_SOURCES = test.cc
-SOURCE_FILES = src/statemachine.cc src/color.cc src/state.cc src/wave.cc
+
+# 1. add the source file here
+SOURCE_FILES = src/color.cc src/state.cc src/wave.cc src/conway.cc 
 SOURCE_OBJECTS = $(SOURCE_FILES:.cc=.o)
 
 # build the spotify-json library
 SPOTIFY_OBJECTS = src/spotify.o
 SPOTIFY_SOURCES = src/spotify.cc
-SPOTIFY_LIB = spotify-json
 
 
 RGB_LIB_DISTRIBUTION=matrix
@@ -22,37 +22,37 @@ LDFLAGS+=-L$(RGB_LIBDIR) -l$(RGB_LIBRARY_NAME) -lrt -lm -lpthread
 
 
 # Object files
+# 2. add the object file here
 TEST_OBJECTS = test.o
 PIXEL_OBJECTS = pixel.o
-TEST_WAVE_OBJECTS = testwave.o
-SPOTIFY_OBJECTS = testspotify.o
+TEST_WAVE_OBJECTS = tests/testwave.o
+SPOTIFY_OBJECTS = tests/testspotify.o
+CONWAY_OBJECTS = tests/testconway.o
 
 
 # Executables
 PIXEL_BINARIES = pixel
 TEST_BINARIES = test
-
-
-RGB_INCDIR=matrix/include
-
-LDFLAGS+=-L$(RGB_LIBDIR) -l$(RGB_LIBRARY_NAME) -lrt -lm -lpthread
+SPOTIFY_BINARIES = spotify
 
 $(RGB_LIBRARY):
 	$(MAKE) -C $(RGB_LIBDIR)	
 
+conway : src/conway.o $(CONWAY_OBJECTS) $(SOURCE_OBJECTS)
+	$(CXX) $(CXXFLAGS) $(CONWAY_OBJECTS) $(SOURCE_OBJECTS) -o $@ 
+
 spotify : $(SPOTIFY_OBJECTS) $(SPOTIFY_SOURCES)
-	$(CXX)  $(CXXFLAGS) $(SPOTIFY_OBJECTS) -o $@ $(LDFLAGS)
+	$(CXX)  $(CXXFLAGS) $(SPOTIFY_OBJECTS) -o $@ -lcurl
 
 
-test_wave : src/wave.o src/state.o $(TEST_WAVE_OBJECTS) $(RGB_LIBRARY)
+wave : src/wave.o src/state.o $(TEST_WAVE_OBJECTS) $(RGB_LIBRARY)
 	$(CXX) $(CXXFLAGS) -I$(RGB_INCDIR) $(TEST_WAVE_OBJECTS) src/wave.o src/state.o -o $@ $(LDFLAGS)
 
-test_wave.o : test_wave.cc
+wave.o : test_wave.cc
 
 test : $(TEST_OBJECTS) $(SOURCE_OBJECTS) 
 	$(CXX) $(CXXFLAGS) $(TEST_OBJECTS) $(SOURCE_OBJECTS) -o $@
 
-test.o : test.cc 
 
 
 pixel : $(PIXEL_OBJECTS) $(RGB_LIBRARY) $(SOURCE_OBJECTS)
@@ -68,6 +68,5 @@ FORCE:
 .PHONY: FORCE
 
 clean :
-	rm -f $(TEST_OBJECTS) $(TEST_BINARIES) $(PIXEL_BINARIES) $(SOURCE_OBJECTS) $(PIXEL_OBJECTS) $(TEST_WAVE_OBJECTS)
+	rm -f $(TEST_OBJECTS) $(TEST_BINARIES) $(PIXEL_BINARIES) $(SOURCE_OBJECTS) $(PIXEL_OBJECTS) $(TEST_WAVE_OBJECTS) $(SPOTIFY_OBJECTS) $(SPOTIFY_BINARIES)
 	$(MAKE) -C $(RGB_LIBDIR) clean
-	
