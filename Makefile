@@ -5,7 +5,7 @@ CXXFLAGS = -Wall -O3 -I./src -Ijson/include -std=c++20 -g
 PIXEL_SOURCES = pixel.cc
 
 # 1. add the source file here
-SOURCE_FILES = src/color.cc src/state.cc src/wave.cc src/conway.cc 
+SOURCE_FILES = src/color.cc src/state.cc src/wave.cc src/conway.cc src/lorenz.cc
 SOURCE_OBJECTS = $(SOURCE_FILES:.cc=.o)
 
 # build the spotify-json library
@@ -28,6 +28,7 @@ PIXEL_OBJECTS = pixel.o
 TEST_WAVE_OBJECTS = tests/testwave.o
 SPOTIFY_OBJECTS = tests/testspotify.o
 CONWAY_OBJECTS = tests/testconway.o
+LORENZ_OBJECTS = tests/testlorenz.o
 
 
 # Executables
@@ -38,7 +39,10 @@ SPOTIFY_BINARIES = spotify
 $(RGB_LIBRARY):
 	$(MAKE) -C $(RGB_LIBDIR)	
 
-conway : src/conway.o $(CONWAY_OBJECTS) $(SOURCE_OBJECTS)
+lorenz : src/lorenz.o $(LORENZ_OBJECTS) $(SOURCE_OBJECTS) $(RGB_LIBRARY)
+	$(CXX) $(CXXFLAGS) -I$(RGB_INCDIR) $(LORENZ_OBJECTS) $(SOURCE_OBJECTS) -o $@  $(LDFLAGS)
+
+conway : src/conway.o $(CONWAY_OBJECTS) $(SOURCE_OBJECTS) $(RGB_LIBRARY)
 	$(CXX) $(CXXFLAGS) $(CONWAY_OBJECTS) $(SOURCE_OBJECTS) -o $@ $(LDFLAGS)
 
 spotify : $(SPOTIFY_OBJECTS) $(SPOTIFY_SOURCES)
