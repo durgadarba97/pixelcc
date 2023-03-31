@@ -23,7 +23,7 @@ Lorenz::Lorenz() {
     beta = 8.0 / 3.0;
 
 
-    cout << x << " " << y << " " << z << endl;
+    // cout << x << " " << y << " " << z << endl;
 
 }
 
