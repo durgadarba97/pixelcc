@@ -50,7 +50,7 @@ void Lorenz::generateFrames(std::vector<std::vector<float> > &grid) {
 
     // set the grid value if indices are within bounds
     if (x1 >= 0 && x1 < 64 && y1 >= 0 && y1 < 64) {
-        grid[x1][y1] = 1;
+        grid[x1][z1] = 1;
     }
 }
 
