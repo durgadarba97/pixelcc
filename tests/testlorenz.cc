@@ -34,8 +34,6 @@ int lorenz(Canvas *canvas) {
                 canvas->SetPixel(x, y, r, g, b);
             }
         }
-        cout << endl;
-
     }
 }
 

@@ -41,16 +41,16 @@ void Lorenz::generateFrames(std::vector<std::vector<float> > &grid) {
     this->y += dy * 0.01;
     this->z += dz * 0.01;
 
-    // convert the values to a grid
-    // int x1 = (int) (x * 10 + 32);
-    // int y1 = (int) (y * 10 + 32);
-    // int z1 = (int) (z * 10 + 32);
+    // center this around the middle of the grid
+    int x1 = x + 32;
+    int y1 = y + 32;
+    int z1 = z + 32;
 
     // std::cout << x1 << " " << y1 << " " << z1 << std::endl;
 
     // set the grid value if indices are within bounds
-    if (x >= 0 && x < 64 && y >= 0 && y < 64) {
-        grid[x][y] = 1;
+    if (x1 >= 0 && x1 < 64 && y1 >= 0 && y1 < 64) {
+        grid[x1][y1] = 1;
     }
 }
 
