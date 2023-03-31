@@ -42,9 +42,9 @@ int conway(Canvas *canvas) {
 
                 // q : will !value be faster than value == 0 ?
                 
-                float r = 255 * !value;
-                float g = 255 * !value;
-                float b = 255 * !value;
+                float r = 255 * value;
+                float g = 255 * value;
+                float b = 255 * value;
                 
                 canvas->SetPixel(x, y, r, g, b);
             }
