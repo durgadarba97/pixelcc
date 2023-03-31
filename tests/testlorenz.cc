@@ -25,7 +25,13 @@ int lorenz(Canvas *canvas) {
         for(int y = 0; y < 64; y++) {
             for(int x = 0; x < 64; x++) {
                 // print grid where x is the first index and y is the second index and if z is greater than 0 then print a 1
-                cout << grid[x][y] << " ";
+                float value = grid[y][x];
+                
+                float r = 255 * value;
+                float g = 255 * value;
+                float b = 255 * value;
+                
+                canvas->SetPixel(x, y, r, g, b);
             }
         }
         cout << endl;

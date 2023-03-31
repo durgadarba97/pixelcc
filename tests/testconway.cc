@@ -39,8 +39,6 @@ int conway(Canvas *canvas) {
             for(int x = 0; x < 64; x++) {
                 // get the grid value and convert it to a color simialr to the state machine
                 float value = grid[y][x];
-
-                // q : will !value be faster than value == 0 ?
                 
                 float r = 255 * value;
                 float g = 255 * value;
