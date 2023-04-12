@@ -132,7 +132,7 @@ void Lorenz::generateFrames(vector<vector<float> > &grid) {
     // cout << x1 << " " << y1 << " " << z1 << endl;
 
     // set the grid value if indices are within bounds
-    if (x1 >= 0 && x1 < 64 && y1 >= 0 && y1 < 64) {
+    if (x1 >= 0 && x1 < 64 && z1 >= 0 && z1 < 64) {
         grid[x1][z1] = 1;
     }
 
