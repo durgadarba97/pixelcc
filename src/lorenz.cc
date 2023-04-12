@@ -56,11 +56,6 @@ void Lorenz::lorenz() {
     // }
 }
 
-
-float randFloat(float min, float max) {
-    return min + (rand() * (max-min) / RAND_MAX);
-}
-
 // Copies the grid and returns a pointer to the copy 2d array
 float** copyGrid(vector<vector<float> > &grid) {
     float** copy = new float*[64];
