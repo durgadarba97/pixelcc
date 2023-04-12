@@ -21,7 +21,7 @@ int lorenz(Canvas *canvas) {
     //     }
     // }
     // preinitialize the grid to lorentz attractor
-    t = 0;
+    int t = 0;
     while(t < 100) {
         lorenz.lorenz();
         t++;
@@ -29,9 +29,9 @@ int lorenz(Canvas *canvas) {
         for (int i = 0; i < 64; i++) {
             for (int j = 0; j < 64; j++) {
 
-                x1 = lorenz.getX() + 32;
-                y1 = lorenz.getY() + 32;
-                z1 = lorenz.getZ();
+                int x1 = lorenz.getX() + 32;
+                int y1 = lorenz.getY() + 32;
+                int z1 = lorenz.getZ();
                 
                 if (x1 >= 0 && x1 < 64 && z1 >= 0 && z1 < 64) {
                     grid[z1][x1] = 1;
