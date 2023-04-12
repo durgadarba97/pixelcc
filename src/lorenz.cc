@@ -57,7 +57,7 @@ void Lorenz::lorenz() {
 }
 
 // Copies the grid and returns a pointer to the copy 2d array
-float** copyGrid(vector<vector<float> > &grid) {
+float** copy(vector<vector<float> > &grid) {
     float** copy = new float*[64];
     for(int i = 0; i < 64; i++) {
         copy[i] = new float[64];
@@ -69,7 +69,7 @@ float** copyGrid(vector<vector<float> > &grid) {
 }
 
 void filter(vector<vector<float> > &grid) {
-    float** lastGrid = copyGrid(grid);
+    float** lastGrid = copy(grid);
 
     for(int i = 0; i < 64; i++) {
         for(int j = 0; j < 64; j++) {
