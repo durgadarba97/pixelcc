@@ -22,10 +22,6 @@ Lorenz::Lorenz() {
     rho = 28.0;
     beta = 8.0 / 3.0;
 
-    vector<vector<float> > weight_grid(64, vector<float>(64));
-
-
-
     // cout << x << " " << y << " " << z << endl;
 }
 

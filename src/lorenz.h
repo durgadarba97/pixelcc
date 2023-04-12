@@ -17,8 +17,8 @@ class Lorenz {
         Lorenz();
         void lorenz();
         void generateFrames(std::vector<std::vector<float> > &grid);
-        int getX();
-        int getY();
-        int getZ();
+        float getX();
+        float getY();
+        float getZ();
 };
 #endif
