@@ -1,4 +1,6 @@
 #include <iostream>
+
+#include "unistd.h"
 #include "led-matrix.h"
 #include "../src/lorenz.h"
 
@@ -26,7 +28,7 @@ int lorenz(Canvas *canvas) {
             for(int x = 0; x < 64; x++) {
                 // get the grid value and convert it to a color simialr to the state machine
                 float value = grid[y][x];
-                
+
                 float r = 255 * powf(value, 4 + (value * 0.5)) * cosf(value);
                 float g = 255 * powf(value, 3 + (value * 0.5)) * sinf(value);
                 float b = 255 * powf(value, 2 + (value * 0.5));

@@ -56,33 +56,6 @@ void Lorenz::lorenz() {
     // }
 }
 
-void Lorenz::generateFrames(vector<vector<float> > &grid) {
-
-    for (int i = 0; i < 100; i++) {
-        lorenz();
-    }
-
-    // cout << x << " " << y << " " << z << endl;
-
-    // center this around the middle of the grid
-    int x1 = x + 32;
-    int y1 = y + 32;
-    int z1 = z + 32;
-
-    // cout << x1 << " " << y1 << " " << z1 << endl;
-
-    // set the grid value if indices are within bounds
-    if (x1 >= 0 && x1 < 64 && y1 >= 0 && y1 < 64) {
-        grid[x1][z1] = 1;
-    }
-
-    // cout << x << " " << y << " " << z << endl;
-
-    // filter the grid
-    filter(grid);
-
-}
-
 
 float randFloat(float min, float max) {
     return min + (rand() * (max-min) / RAND_MAX);
@@ -145,5 +118,32 @@ void filter(vector<vector<float> > &grid) {
     for(int i = 0; i < 64; i++) {
         delete[] lastGrid[i];
     }
+
+}
+
+void Lorenz::generateFrames(vector<vector<float> > &grid) {
+
+    for (int i = 0; i < 100; i++) {
+        lorenz();
+    }
+
+    // cout << x << " " << y << " " << z << endl;
+
+    // center this around the middle of the grid
+    int x1 = x + 32;
+    int y1 = y + 32;
+    int z1 = z + 32;
+
+    // cout << x1 << " " << y1 << " " << z1 << endl;
+
+    // set the grid value if indices are within bounds
+    if (x1 >= 0 && x1 < 64 && y1 >= 0 && y1 < 64) {
+        grid[x1][z1] = 1;
+    }
+
+    // cout << x << " " << y << " " << z << endl;
+
+    // filter the grid
+    filter(grid);
 
 }
