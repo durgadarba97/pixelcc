@@ -118,9 +118,7 @@ void filter(vector<vector<float> > &grid) {
 
 void Lorenz::generateFrames(vector<vector<float> > &grid) {
 
-    for (int i = 0; i < 100; i++) {
-        lorenz();
-    }
+    lorenz();
 
     // cout << x << " " << y << " " << z << endl;
 
