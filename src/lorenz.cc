@@ -56,6 +56,19 @@ void Lorenz::lorenz() {
     // }
 }
 
+float Lorenz::getX() {
+    return x;
+}
+
+float Lorenz::getY() {
+    return y;
+}
+
+float Lorenz::getZ() {
+    return z;
+}
+
+
 // Copies the grid and returns a pointer to the copy 2d array
 float** copy(vector<vector<float> > &grid) {
     float** copy = new float*[64];
