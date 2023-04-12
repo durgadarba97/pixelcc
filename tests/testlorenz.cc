@@ -26,10 +26,10 @@ int lorenz(Canvas *canvas) {
         lorenz.generateFrames(grid);
 
         // print the grid
-        for(int y = 0; y < 64; y++) {
-            for(int x = 0; x < 64; x++) {
+        for(int x = 0; x < 64; x++) {
+            for(int y = 0; y < 64; y++) {
                 // get the grid value and convert it to a color simialr to the state machine
-                float value = grid[y][x];
+                float value = grid[x][y];
 
                 float r = 255 * powf(value, 4 + (value * 0.5)) * cosf(value);
                 float g = 255 * powf(value, 3 + (value * 0.5)) * sinf(value);

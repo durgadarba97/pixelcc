@@ -139,6 +139,6 @@ void Lorenz::generateFrames(vector<vector<float> > &grid) {
     // cout << x << " " << y << " " << z << endl;
 
     // filter the grid
-    filter(grid);
+    // filter(grid);
 
 }
