@@ -1,4 +1,6 @@
 #include <iostream>
+#include <cmath>
+#include <signal.h>
 
 #include "unistd.h"
 #include "led-matrix.h"
