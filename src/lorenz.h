@@ -15,6 +15,7 @@ class Lorenz {
 
     public:
         Lorenz();
+        void lorenz();
         void generateFrames(std::vector<std::vector<float> > &grid);
         int getX();
         int getY();

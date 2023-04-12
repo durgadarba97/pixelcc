@@ -24,16 +24,19 @@ int lorenz(Canvas *canvas) {
         // print the grid
         for(int y = 0; y < 64; y++) {
             for(int x = 0; x < 64; x++) {
-                // print grid where x is the first index and y is the second index and if z is greater than 0 then print a 1
+                // get the grid value and convert it to a color simialr to the state machine
                 float value = grid[y][x];
                 
-                float r = 255 * value;
-                float g = 255 * value;
-                float b = 255 * value;
+                float r = 255 * powf(value, 4 + (value * 0.5)) * cosf(value);
+                float g = 255 * powf(value, 3 + (value * 0.5)) * sinf(value);
+                float b = 255 * powf(value, 2 + (value * 0.5));
                 
                 canvas->SetPixel(x, y, r, g, b);
             }
         }
+
+        // 30 frames per second
+        usleep(33333);
     }
 }
 
