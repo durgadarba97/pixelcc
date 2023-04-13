@@ -35,17 +35,20 @@ void Wave::wave(std::vector<std::vector<float> > &grid) {
             if(lastValue <= (0.18 + 0.04 * (float)rand() / (float)RAND_MAX)) {
                 int n = 0;
 
+                // in a moving window of 3x3,
                 for(int u = -1; u < 2; u++) {
                     for(int v = -1; v < 2; v++) {
                         if(u == 0 && v == 0) {
                             continue;
                         }
 
+                        //  get the value of the cell at the current position
                         int nj = abs((j + u) % 64);
                         int ni = abs((i + v) % 64);
 
                         float nLastValue = lastGrid[ni][nj];
 
+                        // if the value is greater than 0.5, add it to the current cell
                         if(nLastValue >= (0.5 + 0.04 * (float)rand() / (float)RAND_MAX)) {
                             n += 1;
                             grid[i][j] += nLastValue * (0.8 + 0.4 * (float)rand() / (float)RAND_MAX);
