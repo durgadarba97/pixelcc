@@ -20,7 +20,7 @@ RGB_LIBRARY_NAME=rgbmatrix
 RGB_LIBRARY=$(RGB_LIBDIR)/lib$(RGB_LIBRARY_NAME).a
 LDFLAGS+=-L$(RGB_LIBDIR) -l$(RGB_LIBRARY_NAME) -lrt -lm -lpthread
 
-TEST_SOURCES = test.cc tests/testwave.cc tests/testspotify.cc tests/testconway.cc tests/testlorenz.cc
+TEST_SOURCES = tests/test.cc tests/testwave.cc tests/testspotify.cc tests/testconway.cc tests/testlorenz.cc
 TEST_OBJECTS2 = $(TEST_SOURCES:.cc=.o)
 
 
@@ -42,8 +42,8 @@ SPOTIFY_BINARIES = spotify
 $(RGB_LIBRARY):
 	$(MAKE) -C $(RGB_LIBDIR)	
 
-lorenz : src/lorenz.o $(TEST_OBJECTS2) $(SOURCE_OBJECTS)
-	$(CXX) $(CXXFLAGS) -I$(TEST_OBJECTS2) $(SOURCE_OBJECTS) -o $@ $<
+lorenz : $(TEST_OBJECTS2) $(SOURCE_OBJECTS) $(RGB_LIBRARY)
+	$(CXX) $(CXXFLAGS) -I$(RGB_INCDIR) $(TEST_OBJECTS2) $(SOURCE_OBJECTS) -o $@ -lcurl $(LDFLAGS)
 
 conway : src/conway.o $(CONWAY_OBJECTS) $(SOURCE_OBJECTS) $(RGB_LIBRARY)
 	$(CXX) $(CXXFLAGS) $(CONWAY_OBJECTS) $(SOURCE_OBJECTS) -o $@ $(LDFLAGS)

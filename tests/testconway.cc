@@ -53,18 +53,18 @@ int conway(Canvas *canvas) {
     }
 }
 
-int main(int argc, char *argv[]) {
-    RGBMatrix::Options defaults;
-    defaults.hardware_mapping = "adafruit-hat-pwm";  // or e.g. "adafruit-hat"
-    defaults.rows = 64;
-    defaults.cols = 64;
-    defaults.brightness = 75;
+// int main(int argc, char *argv[]) {
+//     RGBMatrix::Options defaults;
+//     defaults.hardware_mapping = "adafruit-hat-pwm";  // or e.g. "adafruit-hat"
+//     defaults.rows = 64;
+//     defaults.cols = 64;
+//     defaults.brightness = 75;
 
-    Canvas *canvas = RGBMatrix::CreateFromFlags(&argc, &argv, &defaults);
-    if (canvas == NULL)
-    return 1;
+//     Canvas *canvas = RGBMatrix::CreateFromFlags(&argc, &argv, &defaults);
+//     if (canvas == NULL)
+//     return 1;
 
-    conway(canvas);    // Using the canvas.
-    return 0;
+//     conway(canvas);    // Using the canvas.
+//     return 0;
 
-}
+// }
