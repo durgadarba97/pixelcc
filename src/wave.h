@@ -2,10 +2,9 @@
 
 #ifndef WAVE_H
 #define WAVE_H
-#include "state.h"
 
 // inherits from State
-class Wave : public State {
+class Wave {
     public:
         Wave();
         ~Wave();

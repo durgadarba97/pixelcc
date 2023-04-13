@@ -7,8 +7,8 @@
 
 using namespace std;
 
-mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());
-uniform_real_distribution<float> dist(0, 1);
+// std::mt19937_64 rng(std::chrono::steady_clock::now().time_since_epoch().count());
+// std::uniform_real_distribution<float> dist(0, 1);
 
 // a program to generate a Lorenz attractor
 Lorenz::Lorenz() {

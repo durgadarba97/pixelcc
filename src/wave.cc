@@ -2,7 +2,6 @@
 #include <cmath>
 #include <random>
 #include "wave.h"
-#include "state.h"
 
 
 Wave::Wave(){}

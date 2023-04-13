@@ -1,10 +1,11 @@
 // using the libcurl and the json libraries to hit the spotify api. 
 // I feel like this is going to suck ...
-
 #include <iostream>
-#include <string>
+#include <fstream>
+#include <nlohmann/json.hpp>
+
+#include "spotify.h"
 #include <curl/curl.h>
-#include <jsoncpp/json/json.h>
 
 using namespace std;
 
