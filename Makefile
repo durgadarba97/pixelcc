@@ -20,7 +20,7 @@ RGB_LIBRARY_NAME=rgbmatrix
 RGB_LIBRARY=$(RGB_LIBDIR)/lib$(RGB_LIBRARY_NAME).a
 LDFLAGS+=-L$(RGB_LIBDIR) -l$(RGB_LIBRARY_NAME) -lrt -lm -lpthread
 
-TEST_SOURCES = tests/test.cc tests/testwave.cc tests/testspotify.cc tests/testconway.cc tests/testlorenz.cc
+TEST_SOURCES = tests/test.cc tests/testwave.cc tests/testconway.cc tests/testlorenz.cc
 TEST_OBJECTS2 = $(TEST_SOURCES:.cc=.o)
 
 
