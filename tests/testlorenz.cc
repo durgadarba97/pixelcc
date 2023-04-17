@@ -28,10 +28,10 @@ int lorenz(Canvas *canvas) {
         lorenz.generateFrames(grid);
 
         // print the grid
-        for(int y = 0; y < 64; y++) {
-            for(int x = 0; x < 64; x++) {
+        for(int x = 0; x < 64; x++) {
+            for(int y = 0; y < 64; y++) {
                 // print grid where x is the first index and y is the second index and if z is greater than 0 then print a 1
-                float value = grid[y][x];
+                float value = grid[x][y];
                 
                 float r = 255 * value;
                 float g = 255 * value;
