@@ -33,13 +33,14 @@ int lorenz(Canvas *canvas) {
                 // print grid where x is the first index and y is the second index and if z is greater than 0 then print a 1
                 float value = grid[x][y];
                 
-                float r = 255 * value;
-                float g = 255 * value;
-                float b = 255 * value;
+                float r = 255 * powf(value, 4 + (value * 0.5)) * cosf(value);
+                float g = 255 * powf(value, 3 + (value * 0.5)) * sinf(value);
+                float b = 255 * powf(value, 2 + (value * 0.5));
                 
                 canvas->SetPixel(x, y, r, g, b);
             }
         }
+        usleep(33333);
     }
 }
 
