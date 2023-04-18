@@ -105,7 +105,7 @@ void filter(vector<vector<float> > &grid) {
                         // if the value is greater than 0.5, add it to the current cell
                         if(nLastValue >= (0.5 + 0.04 * (float)rand() / (float)RAND_MAX)) {
                             n += 1;
-                            grid[i][j] += nLastValue * (0.8 + 0.4 * (float)rand() / (float)RAND_MAX);
+                            grid[i][j] += nLastValue * (0.8);
                         }
                     }
                 }
@@ -132,9 +132,9 @@ void Lorenz::generateFrames(vector<vector<float> > &grid) {
     // cout << x << " " << y << " " << z << endl;
 
     // center this around the middle of the grid
-    int x1 = x;
+    int x1 = x + 32;
     int y1 = y + 32;
-    int z1 = z + 32;
+    int z1 = z;
 
     // cout << x1 << " " << y1 << " " << z1 << endl;
 
