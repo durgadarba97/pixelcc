@@ -84,8 +84,9 @@ void filter(vector<vector<float> > &grid) {
         for(int j = 0; j < 64; j++) {
             float lastValue = lastGrid[i][j];
 
-            grid[i][j] = lastValue * (0.96);
-            if(lastValue <= (0.18)) {
+            // grid[i][j] = lastValue * (0.96 + 0.02 * (float)rand() / (float)RAND_MAX);
+            grid[i][j] = lastValue * (0.96 + 0.02 * (float)rand() / (float)RAND_MAX);
+            if(lastValue <= (0.18 + 0.04 * (float)rand() / (float)RAND_MAX)) {
                 int n = 0;
 
                 // in a moving window of 3x3,
@@ -102,9 +103,9 @@ void filter(vector<vector<float> > &grid) {
                         float nLastValue = lastGrid[ni][nj];
 
                         // if the value is greater than 0.5, add it to the current cell
-                        if(nLastValue >= (0.5)) {
+                        if(nLastValue >= (0.5 + 0.04 * (float)rand() / (float)RAND_MAX)) {
                             n += 1;
-                            grid[i][j] += nLastValue * (0.8);
+                            grid[i][j] += nLastValue * (0.8 + 0.4 * (float)rand() / (float)RAND_MAX);
                         }
                     }
                 }
