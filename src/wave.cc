@@ -1,27 +1,23 @@
 #include <iostream>
 #include <cmath>
 #include <random>
-#include "wave.h"
-
-
-Wave::Wave(){}
-Wave::~Wave(){}
+#include "state.h"
 
 float randFloat(float min, float max) {
     return min + (rand() * (max-min) / RAND_MAX);
 }
 
 // Copies the grid and returns a pointer to the copy 2d array
-float** copyGrid(std::vector<std::vector<float> > &grid) {
-    float** copy = new float*[64];
-    for(int i = 0; i < 64; i++) {
-        copy[i] = new float[64];
-        for(int j = 0; j < 64; j++) {
-            copy[i][j] = grid[i][j];
-        }
-    }
-    return copy;
-}
+// float** copyGrid(std::vector<std::vector<float> > &grid) {
+//     float** copy = new float*[64];
+//     for(int i = 0; i < 64; i++) {
+//         copy[i] = new float[64];
+//         for(int j = 0; j < 64; j++) {
+//             copy[i][j] = grid[i][j];
+//         }
+//     }
+//     return copy;
+// }
 
 void Wave::wave(std::vector<std::vector<float> > &grid) {
     float** lastGrid = copyGrid(grid);
@@ -65,9 +61,7 @@ void Wave::wave(std::vector<std::vector<float> > &grid) {
         }
     }
 
-    for(int i = 0; i < 64; i++) {
-        delete[] lastGrid[i];
-    }
+    deleteGrid(lastGrid);
 
 }
 

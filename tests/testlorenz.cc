@@ -6,7 +6,7 @@
 #include "unistd.h"
 #include "led-matrix.h"
 
-#include "../src/lorenz.h"
+#include "../src/state.h"
 
 using namespace rgb_matrix;
 using namespace std;
