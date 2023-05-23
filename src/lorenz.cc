@@ -47,7 +47,7 @@ float Lorenz::getZ() {
 }
 
 void Lorenz::filter(vector<vector<float> > &grid) {
-    float** lastGrid = copyGrid(grid);
+    vector<vector<float>> lastGrid = copyGrid(grid);
 
     for(int i = 0; i < 64; i++) {
         for(int j = 0; j < 64; j++) {
@@ -88,7 +88,7 @@ void Lorenz::filter(vector<vector<float> > &grid) {
         }
     }
 
-    deleteGrid(lastGrid);
+    // deleteGrid(lastGrid);
 
 }
 

@@ -20,7 +20,7 @@ float randFloat(float min, float max) {
 // }
 
 void Wave::wave(std::vector<std::vector<float> > &grid) {
-    float** lastGrid = copyGrid(grid);
+    vector<vector<float>> lastGrid = copyGrid(grid);
 
     for(int i = 0; i < 64; i++) {
         for(int j = 0; j < 64; j++) {
@@ -61,7 +61,7 @@ void Wave::wave(std::vector<std::vector<float> > &grid) {
         }
     }
 
-    deleteGrid(lastGrid);
+    // deleteGrid(lastGrid);
 
 }
 

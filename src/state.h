@@ -39,23 +39,23 @@ class State {
         // don't really understand initialization list vs assignment syntax, but this works
         State() : rng(chrono::steady_clock::now().time_since_epoch().count()), dist(0, 1) {}
 
-        float** copyGrid(const vector<vector<float>>& grid) {
-            float** copiedGrid = new float*[grid.size()];
-            for (int i = 0; i < grid.size(); i++) {
-                copiedGrid[i] = new float[grid[i].size()];
-                for (int j = 0; j < grid[i].size(); j++) {
-                    copiedGrid[i][j] = grid[i][j];
+        vector<vector<float>> copyGrid(const vector<vector<float>>& grid) {
+            vector<vector<float>> copyGrid(grid.size(), vector<float>(grid[0].size()));
+            
+            for (size_t i = 0; i < grid.size(); i++) {
+                for (size_t j = 0; j < grid[i].size(); j++) {
+                    copyGrid[i][j] = grid[i][j];
                 }
             }
-            return copiedGrid;
+            return copyGrid;
         }
 
-        void deleteGrid(float** grid) {
-            for (int i = 0; i < ROWS; i++) {
-                delete[] grid[i];
-            }
-            delete[] grid;
-        }
+        // void deleteGrid(float** grid) {
+        //     for (int i = 0; i < ROWS; i++) {
+        //         delete[] grid[i];
+        //     }
+        //     delete[] grid;
+        // }
 
 };
 
