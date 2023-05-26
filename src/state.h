@@ -1,20 +1,3 @@
-// #ifndef STATE_H
-// #define STATE_H
-
-// #include <vector>
-// #include <random>
-// #include <chrono>
-
-// class State {
-//     public:
-//         State();
-//         ~State();
-//         void generateFrames(vector<vector<float> > &frames);
-
-// };
-
-// #endif // STATE_H
-
 #ifndef STATE_H
 #define STATE_H
 
@@ -41,7 +24,7 @@ class State {
 
         vector<vector<float>> copyGrid(const vector<vector<float>>& grid) {
             vector<vector<float>> copyGrid(grid.size(), vector<float>(grid[0].size()));
-            
+
             for (size_t i = 0; i < grid.size(); i++) {
                 for (size_t j = 0; j < grid[i].size(); j++) {
                     copyGrid[i][j] = grid[i][j];
@@ -49,14 +32,6 @@ class State {
             }
             return copyGrid;
         }
-
-        // void deleteGrid(float** grid) {
-        //     for (int i = 0; i < ROWS; i++) {
-        //         delete[] grid[i];
-        //     }
-        //     delete[] grid;
-        // }
-
 };
 
 class Lorenz : public State {

@@ -88,7 +88,6 @@ void Lorenz::filter(vector<vector<float> > &grid) {
         }
     }
 
-    // deleteGrid(lastGrid);
 
 }
 
