@@ -3,27 +3,9 @@
 #include <chrono>
 #include <iostream>
 
-#include "lorenz.h"
+#include "state.h"
 
 using namespace std;
-
-// std::mt19937_64 rng(std::chrono::steady_clock::now().time_since_epoch().count());
-// std::uniform_real_distribution<float> dist(0, 1);
-
-// a program to generate a Lorenz attractor
-Lorenz::Lorenz() {
-    // set the initial values
-    x = 1.0;
-    y = 1.0;
-    z = 0.0;  
-
-    // set the constants
-    sigma = 10.0;
-    rho = 35.0;
-    beta = 8.0 / 3.0;
-
-    // cout << x << " " << y << " " << z << endl;
-}
 
 void Lorenz::lorenz() {
     // cout << x << " " << y << " " << z << endl;
@@ -64,21 +46,8 @@ float Lorenz::getZ() {
     return z;
 }
 
-
-// Copies the grid and returns a pointer to the copy 2d array
-float** copy(vector<vector<float> > &grid) {
-    float** copy = new float*[64];
-    for(int i = 0; i < 64; i++) {
-        copy[i] = new float[64];
-        for(int j = 0; j < 64; j++) {
-            copy[i][j] = grid[i][j];
-        }
-    }
-    return copy;
-}
-
-void filter(vector<vector<float> > &grid) {
-    float** lastGrid = copy(grid);
+void Lorenz::filter(vector<vector<float> > &grid) {
+    vector<vector<float>> lastGrid = copyGrid(grid);
 
     for(int i = 0; i < 64; i++) {
         for(int j = 0; j < 64; j++) {
@@ -97,8 +66,8 @@ void filter(vector<vector<float> > &grid) {
                         }
 
                         //  get the value of the cell at the current position
-                        int nj = abs((j + u) % 64);
-                        int ni = abs((i + v) % 64);
+                        int nj = abs((j + u) % ROWS);
+                        int ni = abs((i + v) % COLS);
 
                         float nLastValue = lastGrid[ni][nj];
 
@@ -119,9 +88,6 @@ void filter(vector<vector<float> > &grid) {
         }
     }
 
-    for(int i = 0; i < 64; i++) {
-        delete[] lastGrid[i];
-    }
 
 }
 

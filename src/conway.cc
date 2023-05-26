@@ -1,7 +1,7 @@
 #include <iostream>
 #include <random>
 #include <chrono>
-#include "conway.h"
+#include "state.h"
 
 // Grid dimensions
 const int GRID_SIZE = 64;

@@ -8,7 +8,7 @@
 #include <cmath>
 #include <signal.h>
 
-#include "../src/wave.h"
+#include "../src/state.h"
 #include "led-matrix.h"
 
 

@@ -5,7 +5,7 @@
 #include "led-matrix.h"
 
 
-#include "../src/conway.h"
+#include "../src/state.h"
 
 using namespace rgb_matrix;
 using namespace std;
@@ -13,7 +13,6 @@ using namespace std;
 std::mt19937_64 rng(std::chrono::steady_clock::now().time_since_epoch().count());
 std::uniform_int_distribution<int> dist(0, 1);
 
-Conway::Conway() {}
 
 void initGrid(vector<vector<float> > &grid) {
     for (int i = 0; i < 64; i++) {
