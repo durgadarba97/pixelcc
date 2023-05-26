@@ -9,8 +9,8 @@ SOURCE_FILES = src/wave.cc src/conway.cc src/lorenz.cc
 SOURCE_OBJECTS = $(SOURCE_FILES:.cc=.o)
 
 # build the spotify-json library
-SPOTIFY_OBJECTS = src/spotify.o
-SPOTIFY_SOURCES = src/spotify.cc
+# SPOTIFY_OBJECTS = src/spotify.o
+# SPOTIFY_SOURCES = src/spotify.cc
 
 
 RGB_LIB_DISTRIBUTION=matrix
@@ -26,10 +26,9 @@ TEST_OBJECTS2 = $(TEST_SOURCES:.cc=.o)
 
 # Object files
 # 2. add the object file here
-TEST_OBJECTS = tests/testwave.o tests/testspotify.o tests/testconway.o tests/testlorenz.o
+TEST_OBJECTS = tests/testwave.o tests/testconway.o tests/testlorenz.o
 PIXEL_OBJECTS = pixel.o
 TEST_WAVE_OBJECTS = tests/testwave.o
-SPOTIFY_OBJECTS = tests/testspotify.o
 CONWAY_OBJECTS = tests/testconway.o
 LORENZ_OBJECTS = tests/testlorenz.o
 
@@ -37,7 +36,6 @@ LORENZ_OBJECTS = tests/testlorenz.o
 # Executables
 PIXEL_BINARIES = pixel
 TEST_BINARIES = test
-SPOTIFY_BINARIES = spotify
 
 $(RGB_LIBRARY):
 	$(MAKE) -C $(RGB_LIBDIR)	
@@ -48,12 +46,8 @@ lorenz : $(TEST_OBJECTS2) $(SOURCE_OBJECTS) $(RGB_LIBRARY)
 conway : src/conway.o $(CONWAY_OBJECTS) $(SOURCE_OBJECTS) $(RGB_LIBRARY)
 	$(CXX) $(CXXFLAGS) $(CONWAY_OBJECTS) $(SOURCE_OBJECTS) -o $@ $(LDFLAGS)
 
-spotify : $(SPOTIFY_OBJECTS) $(SPOTIFY_SOURCES)
-	$(CXX)  $(CXXFLAGS) $(SPOTIFY_OBJECTS) -o $@ -lcurl
-
-
-wave : src/wave.o src/state.o $(TEST_OBJECTS) $(RGB_LIBRARY)
-	$(CXX) $(CXXFLAGS) -I$(RGB_INCDIR) $(TEST_OBJECTS) src/wave.o src/state.o -o $@ $(LDFLAGS)
+wave : src/wave.o $(TEST_OBJECTS) $(RGB_LIBRARY)
+	$(CXX) $(CXXFLAGS) -I$(RGB_INCDIR) $(TEST_OBJECTS) src/wave.o -o $@ $(LDFLAGS)
 
 wave.o : test_wave.cc
 
