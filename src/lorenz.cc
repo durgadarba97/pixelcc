@@ -66,8 +66,8 @@ void Lorenz::filter(vector<vector<float> > &grid) {
                         }
 
                         //  get the value of the cell at the current position
-                        int nj = abs((j + u) % ROWS);
-                        int ni = abs((i + v) % COLS);
+                        int nj = abs((j + u) % 64);
+                        int ni = abs((i + v) % 64);
 
                         float nLastValue = lastGrid[ni][nj];
 
@@ -85,6 +85,8 @@ void Lorenz::filter(vector<vector<float> > &grid) {
 
                 grid[i][j] = fmin(grid[i][j], float(1.0));
             }
+        }
+    }
         }
     }
 
