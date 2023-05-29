@@ -87,11 +87,8 @@ void Lorenz::filter(vector<vector<float> > &grid) {
             }
         }
     }
-        }
-    }
-
-
 }
+
 
 void Lorenz::generateFrames(vector<vector<float> > &grid) {
 
