@@ -26,7 +26,7 @@ void Lorenz::lorenz() {
     // int y1 = y + 32;
     // int z1 = z + 32;
 
-    cout << x1 << " " << y1 << " " << z1 << endl;
+    cout << x << " " << y << " " << z << endl;
 
     // set the grid value if indices are within bounds
     // if (x1 >= 0 && x1 < 64 && y1 >= 0 && y1 < 64) {
