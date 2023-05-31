@@ -7,6 +7,21 @@
 
 using namespace std;
 
+Lorenz::Lorenz() {
+    // set the initial values
+    x = 1.0;
+    y = 1.0;
+    z = 0.0;  
+
+    // set the constants
+    sigma = 10.0;
+    rho = 35.0;
+    beta = 8.0 / 3.0;
+
+    // cout << x << " " << y << " " << z << endl;
+}
+
+
 void Lorenz::lorenz() {
     // cout << x << " " << y << " " << z << endl;
     // calculate the next values
