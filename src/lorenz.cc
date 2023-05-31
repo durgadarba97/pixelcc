@@ -114,7 +114,7 @@ void Lorenz::generateFrames(vector<vector<float> > &grid) {
     // center this around the middle of the grid
     int x1 = x + 32;
     int y1 = y + 32;
-    int z1 = z + 32;
+    int z1 = z;
 
     // cout << x1 << " " << y1 << " " << z1 << endl;
 

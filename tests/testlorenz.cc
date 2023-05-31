@@ -58,7 +58,7 @@ int lorenz(Canvas *canvas) {
     // }
     // preinitialize the grid to lorentz attractor
     int t = 0;
-    while(t < 100) {
+    while(t < 500) {
         lorenz.lorenz();
         t++;
     
