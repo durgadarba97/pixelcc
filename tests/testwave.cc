@@ -75,23 +75,22 @@ int wave(Canvas *canvas) {
         }
 
         // 30 frames per second
-        // usleep(33333);
+        usleep(40000);
     }
     cout << "wave created" << endl;
 }
 
-int main(int argc, char *argv[]) {
-    RGBMatrix::Options defaults;
-    defaults.hardware_mapping = "adafruit-hat-pwm";  // or e.g. "adafruit-hat"
-    defaults.rows = 64;
-    defaults.cols = 64;
-    defaults.gpio_slowdown = 4;
+// int main(int argc, char *argv[]) {
+//     RGBMatrix::Options defaults;
+//     defaults.hardware_mapping = "adafruit-hat-pwm";  // or e.g. "adafruit-hat"
+//     defaults.rows = 64;
+//     defaults.cols = 64;
 
-    Canvas *canvas = RGBMatrix::CreateFromFlags(&argc, &argv, &defaults);
-    if (canvas == NULL)
-    return 1;
+//     Canvas *canvas = RGBMatrix::CreateFromFlags(&argc, &argv, &defaults);
+//     if (canvas == NULL)
+//     return 1;
 
-    wave(canvas);    // Using the canvas.
-    return 0;
+//     wave(canvas);    // Using the canvas.
+//     return 0;
 
-}
+// }
