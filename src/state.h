@@ -45,6 +45,7 @@ class Lorenz : public State {
         float beta;
 
     public:
+        Lorenz();
         void lorenz();
         void generateFrames(vector<vector<float>>& grid) override;
         void filter(vector<vector<float>>& grid);
