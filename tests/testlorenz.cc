@@ -24,7 +24,7 @@ int lorenz(Canvas *canvas) {
     }
 
     while(true) {
-        // cout << lorenz.getX() << " " << lorenz.getY() << " " << lorenz.getZ() << endl;
+        cout << lorenz.getX() << " " << lorenz.getY() << " " << lorenz.getZ() << endl;
         lorenz.generateFrames(grid);
 
         // print the grid
