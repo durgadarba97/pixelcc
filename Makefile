@@ -38,8 +38,8 @@ TEST_BINARIES = test
 $(RGB_LIBRARY):
 	$(MAKE) -C $(RGB_LIBDIR)	
 
-spotify : tests/testspotify.o src/spotify.o
-	$(CXX) $(CXXFLAGS) tests/testspotify.o src/spotify.o -o $@ -lcurl $(LDFLAGS) $(MAGICK_LDFLAGS)
+spotify: tests/testspotify.o src/spotify.o
+    $(CXX) $(CXXFLAGS) $(MAGICK_CXXFLAGS) tests/testspotify.o src/spotify.o -o $@ -lcurl $(LDFLAGS) $(MAGICK_LDFLAGS)
 
 lorenz : $(TEST_OBJECTS2) $(SOURCE_OBJECTS) $(RGB_LIBRARY)
 	$(CXX) $(CXXFLAGS) -I$(RGB_INCDIR) $(TEST_OBJECTS2) $(SOURCE_OBJECTS) -o $@ $(LDFLAGS)
