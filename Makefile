@@ -8,17 +8,15 @@ PIXEL_SOURCES = pixel.cc
 SOURCE_FILES = src/wave.cc src/conway.cc src/lorenz.cc
 SOURCE_OBJECTS = $(SOURCE_FILES:.cc=.o)
 
-# build the spotify-json library
-# SPOTIFY_OBJECTS = src/spotify.o
-# SPOTIFY_SOURCES = src/spotify.cc
-
-
 RGB_LIB_DISTRIBUTION=matrix
 RGB_INCDIR=$(RGB_LIB_DISTRIBUTION)/include
 RGB_LIBDIR=$(RGB_LIB_DISTRIBUTION)/lib
 RGB_LIBRARY_NAME=rgbmatrix
 RGB_LIBRARY=$(RGB_LIBDIR)/lib$(RGB_LIBRARY_NAME).a
 LDFLAGS+=-L$(RGB_LIBDIR) -l$(RGB_LIBRARY_NAME) -lrt -lm -lpthread
+
+MAGICK_CXXFLAGS?=$(shell GraphicsMagick++-config --cppflags --cxxflags)
+MAGICK_LDFLAGS?=$(shell GraphicsMagick++-config --ldflags --libs)
 
 TEST_SOURCES = tests/testwave.cc tests/testconway.cc tests/testlorenz.cc
 TEST_OBJECTS2 = $(TEST_SOURCES:.cc=.o)
@@ -39,6 +37,9 @@ TEST_BINARIES = test
 
 $(RGB_LIBRARY):
 	$(MAKE) -C $(RGB_LIBDIR)	
+
+spotify : tests/testspotify.o src/spotify.o
+	$(CXX) $(CXXFLAGS) tests/testspotify.o src/spotify.o -o $@ -lcurl $(LDFLAGS) $(MAGICK_LDFLAGS)
 
 lorenz : $(TEST_OBJECTS2) $(SOURCE_OBJECTS) $(RGB_LIBRARY)
 	$(CXX) $(CXXFLAGS) -I$(RGB_INCDIR) $(TEST_OBJECTS2) $(SOURCE_OBJECTS) -o $@ $(LDFLAGS)

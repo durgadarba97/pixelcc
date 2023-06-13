@@ -4,7 +4,9 @@
 #include <vector>
 #include <random>
 #include <chrono>
+#include <nlohmann/json.hpp>
 
+using json = nlohmann::json;
 using namespace std;
 
 class State {
