@@ -102,6 +102,7 @@ int usage(const char *progname) {
 int main(int argc, char *argv[]) {
     Magick::InitializeMagick(*argv);
 
+    RGBMatrix::Options defaults;
     defaults.hardware_mapping = "adafruit-hat-pwm";  // or e.g. "adafruit-hat"
     defaults.rows = 64;
     defaults.cols = 64;
