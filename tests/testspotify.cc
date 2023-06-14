@@ -114,10 +114,6 @@ int main(int argc, char *argv[]) {
     signal(SIGTERM, InterruptHandler);
     signal(SIGINT, InterruptHandler);
 
-    RGBMatrix *matrix = RGBMatrix::CreateFromOptions(matrix_options, runtime_opt);
-    if (matrix == NULL)
-    return 1;
-
     Spotify spotify;
     while(true) {
         int updated = spotify.update();
@@ -126,7 +122,7 @@ int main(int argc, char *argv[]) {
             if(updated) {
                 // load the image
                 ImageVector image = LoadImageAndScaleImage("./tmp/spotify.png", 64, 64);
-                CopyImageToCanvas(image[0], matrix);
+                CopyImageToCanvas(image[0], canvas);
             }
             sleep(4);
             continue;
