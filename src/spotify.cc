@@ -141,7 +141,15 @@ json Spotify::getCurrentlyPlaying() {
 
 int Spotify::saveImage() {
     string url = current_state["item"]["album"]["images"][0]["url"];
-    string command = "wget -q -O ./tmp/spotify.png " + url;
+    string tempFile = "./tmp/spotify_tmp.png";
+    string finalFile = "./tmp/spotify.png";
+
+    // Download the image file to a temporary location
+    string command = "wget -q -O " + tempFile + " " + url;
+    system(command.c_str());
+
+    // Move the temporary file to the final destination
+    command = "mv " + tempFile + " " + finalFile;
     system(command.c_str());
 
     return 1;
