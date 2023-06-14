@@ -1,22 +1,30 @@
-#include <vector>
-#include <iostream>
-#include <unistd.h>
-#include <Magick++.h>
-#include <magick/image.h>
 #include "led-matrix.h"
-
 #include "../src/spotify.h"
 
-// write a test similar to the one in matrix/examples-api-use/image-example.cc
+#include <math.h>
+#include <signal.h>
+#include <stdio.h>
+#include <unistd.h>
 
-using namespace std;
+#include <exception>
+#include <Magick++.h>
+#include <magick/image.h>
+
 using rgb_matrix::Canvas;
 using rgb_matrix::RGBMatrix;
 using rgb_matrix::FrameCanvas;
+
+// Make sure we can exit gracefully when Ctrl-C is pressed.
+volatile bool interrupt_received = false;
+static void InterruptHandler(int signo) {
+  interrupt_received = true;
+}
+
 using ImageVector = std::vector<Magick::Image>;
 
-
-// Given the filename, load the image and scale to the size of the matrix.
+// Given the filename, load the image and scale to the size of the
+// matrix.
+// // If this is an animated image, the resutlting vector will contain multiple.
 static ImageVector LoadImageAndScaleImage(const char *filename,
                                           int target_width,
                                           int target_height) {
@@ -50,6 +58,10 @@ static ImageVector LoadImageAndScaleImage(const char *filename,
   return result;
 }
 
+
+// Copy an image to a Canvas. Note, the RGBMatrix is implementing the Canvas
+// interface as well as the FrameCanvas we use in the double-buffering of the
+// animted image.
 void CopyImageToCanvas(const Magick::Image &image, Canvas *canvas) {
   const int offset_x = 0, offset_y = 0;  // If you want to move the image.
   // Copy all the pixels to the canvas.
@@ -66,16 +78,46 @@ void CopyImageToCanvas(const Magick::Image &image, Canvas *canvas) {
   }
 }
 
-int main(int argc, char *argv[]) {
-    Spotify spotify = Spotify();
+// An animated image has to constantly swap to the next frame.
+// We're using double-buffering and fill an offscreen buffer first, then show.
+void ShowAnimatedImage(const ImageVector &images, RGBMatrix *matrix) {
+  FrameCanvas *offscreen_canvas = matrix->CreateFrameCanvas();
+  while (!interrupt_received) {
+    for (const auto &image : images) {
+      if (interrupt_received) break;
+      CopyImageToCanvas(image, offscreen_canvas);
+      offscreen_canvas = matrix->SwapOnVSync(offscreen_canvas);
+      usleep(image.animationDelay() * 10000);  // 1/100s converted to usec
+    }
+  }
+}
 
-    RGBMatrix::Options defaults;
+int usage(const char *progname) {
+  fprintf(stderr, "Usage: %s [led-matrix-options] <image-filename>\n",
+          progname);
+  rgb_matrix::PrintMatrixFlags(stderr);
+  return 1;
+}
+
+int main(int argc, char *argv[]) {
+    Magick::InitializeMagick(*argv);
+
     defaults.hardware_mapping = "adafruit-hat-pwm";  // or e.g. "adafruit-hat"
     defaults.rows = 64;
     defaults.cols = 64;
 
     Canvas *canvas = RGBMatrix::CreateFromFlags(&argc, &argv, &defaults);
+    if (canvas == NULL)
+    return 1;
 
+    signal(SIGTERM, InterruptHandler);
+    signal(SIGINT, InterruptHandler);
+
+    RGBMatrix *matrix = RGBMatrix::CreateFromOptions(matrix_options, runtime_opt);
+    if (matrix == NULL)
+    return 1;
+
+    Spotify spotify;
     while(true) {
         int updated = spotify.update();
 
@@ -83,10 +125,17 @@ int main(int argc, char *argv[]) {
             if(updated) {
                 // load the image
                 ImageVector image = LoadImageAndScaleImage("./tmp/spotify.png", 64, 64);
-                CopyImageToCanvas(image[0], canvas);
+                CopyImageToCanvas(image[0], matrix);
             }
             sleep(4);
             continue;
         }
+        sleep(10);
     }
+
+
+    matrix->Clear();
+    delete matrix;
+
+    return 0;
 }
