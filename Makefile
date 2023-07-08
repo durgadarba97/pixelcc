@@ -1,5 +1,6 @@
 # Compiler flags
-CXXFLAGS = -Wall -O3 -I./src -Ijson/include -std=c++20 -g
+CXXFLAGS = -Wall -O3 -I./src -Ijson/include -I/usr/include/GraphicsMagick -std=c++20 -g -I/usr/include/ImageMagick-6 -Imatrix/include
+LDLIBS = -lcurl -lrt -lm -lpthread -lGraphicsMagick++ -lGraphicsMagick
 
 # Source files
 PIXEL_SOURCES = pixel.cc
@@ -38,14 +39,17 @@ TEST_BINARIES = test
 $(RGB_LIBRARY):
 	$(MAKE) -C $(RGB_LIBDIR)	
 
-spotify: tests/testspotify.o src/spotify.o
-    $(CXX) $(CXXFLAGS) $(MAGICK_CXXFLAGS) tests/testspotify.o src/spotify.o -o $@ -lcurl $(LDFLAGS) $(MAGICK_LDFLAGS)
+spotify: src/spotify.o tests/testspotify.o $(RGB_LIBRARY)
+	$(CXX) $(CXXFLAGS) -I$(RGB_INCDIR) src/spotify.o tests/testspotify.o -o $@ $(LDFLAGS) $(LDLIBS)
+
+src/spotify.o: src/spotify.cc
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 lorenz : $(TEST_OBJECTS2) $(SOURCE_OBJECTS) $(RGB_LIBRARY)
 	$(CXX) $(CXXFLAGS) -I$(RGB_INCDIR) $(TEST_OBJECTS2) $(SOURCE_OBJECTS) -o $@ $(LDFLAGS)
 
-conway : src/conway.o $(CONWAY_OBJECTS) $(SOURCE_OBJECTS) $(RGB_LIBRARY)
-	$(CXX) $(CXXFLAGS) $(CONWAY_OBJECTS) $(SOURCE_OBJECTS) -o $@ $(LDFLAGS)
+conway : src/conway.o tests/testconway.o $(RGB_LIBRARY)
+	$(CXX) $(CXXFLAGS) tests/testconway.o -o $@ $(LDFLAGS)
 
 wave : $(TEST_OBJECTS2) $(SOURCE_OBJECTS) $(RGB_LIBRARY)
 	$(CXX) $(CXXFLAGS) -I$(RGB_INCDIR) $(TEST_OBJECTS2) $(SOURCE_OBJECTS) -o $@ $(LDFLAGS)
