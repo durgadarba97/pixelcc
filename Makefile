@@ -55,10 +55,8 @@ wave.o : test_wave.cc
 test : $(TEST_OBJECTS) $(SOURCE_OBJECTS) 
 	$(CXX) $(CXXFLAGS) $(TEST_OBJECTS) $(SOURCE_OBJECTS) -o $@
 
-
-
 pixel : $(PIXEL_OBJECTS) $(RGB_LIBRARY) $(SOURCE_OBJECTS)
-	$(CXX)  $(CXXFLAGS) $(PIXEL_OBJECTS) $(SOURCE_OBJECTS) -o $@ $(LDFLAGS)
+	$(CXX)  $(CXXFLAGS) $(PIXEL_OBJECTS) $(SOURCE_OBJECTS) src/spotify.o -o $@ -lcurl $(LDFLAGS) $(MAGICK_LDFLAGS)
 	
 
 pixel.o : pixel.cc
