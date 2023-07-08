@@ -7,6 +7,21 @@
 
 using namespace std;
 
+Lorenz::Lorenz() {
+    // set the initial values
+    x = 1.0;
+    y = 1.0;
+    z = 0.0;  
+
+    // set the constants
+    sigma = 10.0;
+    rho = 35.0;
+    beta = 8.0 / 3.0;
+
+    // cout << x << " " << y << " " << z << endl;
+}
+
+
 void Lorenz::lorenz() {
     // cout << x << " " << y << " " << z << endl;
     // calculate the next values
@@ -26,7 +41,7 @@ void Lorenz::lorenz() {
     // int y1 = y + 32;
     // int z1 = z + 32;
 
-    // cout << x1 << " " << y1 << " " << z1 << endl;
+    // cout << x << " " << y << " " << z << endl;
 
     // set the grid value if indices are within bounds
     // if (x1 >= 0 && x1 < 64 && y1 >= 0 && y1 < 64) {
@@ -66,8 +81,8 @@ void Lorenz::filter(vector<vector<float> > &grid) {
                         }
 
                         //  get the value of the cell at the current position
-                        int nj = abs((j + u) % ROWS);
-                        int ni = abs((i + v) % COLS);
+                        int nj = abs((j + u) % 64);
+                        int ni = abs((i + v) % 64);
 
                         float nLastValue = lastGrid[ni][nj];
 
@@ -87,9 +102,8 @@ void Lorenz::filter(vector<vector<float> > &grid) {
             }
         }
     }
-
-
 }
+
 
 void Lorenz::generateFrames(vector<vector<float> > &grid) {
 

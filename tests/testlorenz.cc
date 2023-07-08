@@ -11,15 +11,30 @@
 using namespace rgb_matrix;
 using namespace std;
 
+
 int lorenz(Canvas *canvas) {
     Lorenz lorenz;
     // cout << lorenz.getX() << " " << lorenz.getY() << " " << lorenz.getZ() << endl;
 
     vector<vector<float> > grid(64, vector<float>(64));
 
-    for (int i = 0; i < 64; i++) {
-        for (int j = 0; j < 64; j++) {
-            grid[i][j] = 0;
+    // preinitialize the grid to lorentz attractor
+    int t = 0;
+    while(t < 500) {
+        lorenz.lorenz();
+        t++;
+    
+        for (int i = 0; i < 64; i++) {
+            for (int j = 0; j < 64; j++) {
+
+                int x1 = lorenz.getX() + 32;
+                int y1 = lorenz.getY() + 32;
+                int z1 = lorenz.getZ();
+                
+                if (x1 >= 0 && x1 < 64 && z1 >= 0 && z1 < 64) {
+                    grid[z1][x1] = 1;
+                }
+            }
         }
     }
 
@@ -30,9 +45,9 @@ int lorenz(Canvas *canvas) {
         // print the grid
         for(int x = 0; x < 64; x++) {
             for(int y = 0; y < 64; y++) {
-                // print grid where x is the first index and y is the second index and if z is greater than 0 then print a 1
+                // get the grid value and convert it to a color simialr to the state machine
                 float value = grid[x][y];
-                
+
                 float r = 255 * powf(value, 4 + (value * 0.5)) * cosf(value);
                 float g = 255 * powf(value, 3 + (value * 0.5)) * sinf(value);
                 float b = 255 * powf(value, 2 + (value * 0.5));
@@ -40,8 +55,11 @@ int lorenz(Canvas *canvas) {
                 canvas->SetPixel(x, y, r, g, b);
             }
         }
-        usleep(33333);
+
+        // 30 frames per second
+        usleep(40000);
     }
+    return 0;
 }
 
 int main(int argc, char *argv[]) {
@@ -58,71 +76,3 @@ int main(int argc, char *argv[]) {
     return 0;
 
 }
-
-
-// int main(int argc, char *argv[]) {
-//     Lorenz lorenz;
-//     // cout << lorenz.getX() << " " << lorenz.getY() << " " << lorenz.getZ() << endl;
-
-//     vector<vector<float> > grid(64, vector<float>(64));
-
-//     for (int i = 0; i < 64; i++) {
-//         for (int j = 0; j < 64; j++) {
-//             grid[i][j] = 0;
-//         }
-//     }
-
-//     while(true) {
-//         // cout << lorenz.getX() << " " << lorenz.getY() << " " << lorenz.getZ() << endl;
-//         lorenz.generateFrames(grid);
-
-//         // print the grid
-//         for(int y = 0; y < 64; y++) {
-//             for(int x = 0; x < 64; x++) {
-//                 // print grid where x is the first index and y is the second index and if z is greater than 0 then print a 1
-//                 float value = grid[y][x];
-                
-//                 float r = 255 * value;
-//                 float g = 255 * value;
-//                 float b = 255 * value;
-                
-//                 cout << r << " " << g << " " << b << endl;
-//             }
-//         }
-//     }
-//     return 0;
-// }
-
-
-// int main(int argc, char *argv[]) {
-//     Lorenz lorenz;
-//     // cout << lorenz.getX() << " " << lorenz.getY() << " " << lorenz.getZ() << endl;
-
-//     vector<vector<float> > grid(64, vector<float>(64));
-
-//     for (int i = 0; i < 64; i++) {
-//         for (int j = 0; j < 64; j++) {
-//             grid[i][j] = 0;
-//         }
-//     }
-
-//     while(true) {
-//         // cout << lorenz.getX() << " " << lorenz.getY() << " " << lorenz.getZ() << endl;
-//         lorenz.generateFrames(grid);
-
-//         // print the grid
-//         for(int y = 0; y < 64; y++) {
-//             for(int x = 0; x < 64; x++) {
-//                 // print grid where x is the first index and y is the second index and if z is greater than 0 then print a 1
-//                 float value = grid[y][x];
-                
-//                 float r = 255 * value;
-//                 float g = 255 * value;
-//                 float b = 255 * value;
-                
-//                 cout << r << " " << g << " " << b << endl;
-//             }
-//         }
-//     }
-//     return 0;
-// }

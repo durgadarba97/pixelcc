@@ -4,7 +4,9 @@
 #include <vector>
 #include <random>
 #include <chrono>
+#include <nlohmann/json.hpp>
 
+using json = nlohmann::json;
 using namespace std;
 
 class State {
@@ -45,6 +47,7 @@ class Lorenz : public State {
         float beta;
 
     public:
+        Lorenz();
         void lorenz();
         void generateFrames(vector<vector<float>>& grid) override;
         void filter(vector<vector<float>>& grid);
