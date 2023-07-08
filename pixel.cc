@@ -116,12 +116,19 @@ int render() {
   }
 
   // draw the lorenz attractor
-  lorenz.lorenz();
+  lorenz.generateFrames(grid);
   for (int i = 0; i < 64; i++) {
     for (int j = 0; j < 64; j++) {
-      int x1 = lorenz.getX() + 32;
-      intå y1 = lorenz.getY() + 32;
-      int z1 = lorenz.getZ();
+      
+      // get the grid value and convert it to a color simialr to the state machine
+      float value = grid[x][y];
+
+      float r = 255 * powf(value, 4 + (value * 0.5)) * cosf(value);
+      float g = 255 * powf(value, 3 + (value * 0.5)) * sinf(value);
+      float b = 255 * powf(value, 2 + (value * 0.5));
+      
+      canvas->SetPixel(x, y, r, g, b);
+
       
       if (x1 >= 0 && x1 < 64 && z1 >= 0 && z1 < 64) {
           grid[z1][x1] = 1;
