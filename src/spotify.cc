@@ -201,10 +201,11 @@ bool Spotify::update() {
     }
 
     json current = getCurrentlyPlaying();
-    if(current["is_playing"] && current["item"]["id"] != current_state["item"]["id"]) {
+    if(current["item"]["id"] != current_state["item"]["id"]) {
         current_state = current;
         saveImage();
         return true;
     }
+    current_state = current;
     return false;
 }

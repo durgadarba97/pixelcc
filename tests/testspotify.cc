@@ -5,6 +5,7 @@
 #include <signal.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <iostream>
 
 #include <exception>
 #include <Magick++.h>
@@ -115,18 +116,20 @@ int main(int argc, char *argv[]) {
     signal(SIGINT, InterruptHandler);
 
     Spotify spotify;
-    while(true) {
+    while(!interrupt_received) {
         int updated = spotify.update();
 
         if(spotify.isPlaying()) {
-            if(updated) {
-                // load the image
-                ImageVector image = LoadImageAndScaleImage("./tmp/spotify.png", 64, 64);
-                CopyImageToCanvas(image[0], canvas);
-            }
-            sleep(4);
-            continue;
+          if(updated) {
+              // load the image
+              ImageVector image = LoadImageAndScaleImage("./tmp/spotify.png", 64, 64);
+              CopyImageToCanvas(image[0], canvas);
+          }
+          cout << "in isplaying" << endl;
+          sleep(4);
+          continue;
         }
+        canvas->Clear();
         sleep(10);
     }
 
