@@ -30,3 +30,7 @@ but the performace with the Python library is not good, so I'm rewriting it in C
     - Other
         -Clean up Makefile
         
+terminate called after throwing an instance of 'nlohmann::json_abi_v3_11_2::detail::type_error'
+  what():  [json.exception.type_error.302] type must be string, but is null
+Magick: abort due to signal 6 (SIGABRT) "Abort"...
+Aborted
