@@ -1,28 +1,31 @@
 #include "led-matrix.h"
 #include "./src/spotify.h"
 #include "./src/state.h"
-
 #include <math.h>
 #include <signal.h>
 #include <stdio.h>
 #include <unistd.h>
-
 #include <exception>
 #include <Magick++.h>
 #include <magick/image.h>
+#include <thread>
+#include <iostream>
+#include <mutex>
+#include <atomic>
 
-
-// include everything in utils directory
-
+using ImageVector = std::vector<Magick::Image>;
 using rgb_matrix::RGBMatrix;
 using rgb_matrix::Canvas;
+using namespace std;
+
+std::mutex canvas_mutex;
+std::atomic<bool> spotify_playing(false);
+
 
 volatile bool interrupt_received = false;
 static void InterruptHandler(int signo) {
   interrupt_received = true;
 }
-
-using ImageVector = std::vector<Magick::Image>;
 
 // From the example in the matrix library:
 static ImageVector LoadImageAndScaleImage(const char *filename, int target_width, int target_height) {
@@ -31,7 +34,6 @@ static ImageVector LoadImageAndScaleImage(const char *filename, int target_width
   ImageVector frames;
   try {
     readImages(&frames, filename);
-
   } catch (std::exception &e) {
     if (e.what())
       fprintf(stderr, "%s\n", e.what());
@@ -56,24 +58,21 @@ static ImageVector LoadImageAndScaleImage(const char *filename, int target_width
 
   return result;
 }
-
 void CopyImageToCanvas(const Magick::Image &image, Canvas *canvas) {
   const int offset_x = 0, offset_y = 0;  // If you want to move the image.
+
   // Copy all the pixels to the canvas.
-  for (size_t y = 0; y < image.rows(); ++y) {
-    for (size_t x = 0; x < image.columns(); ++x) {
+  for (size_t y = 0; y < 64; ++y) {
+    for (size_t x = 0; x < 64; ++x) {
       const Magick::Color &c = image.pixelColor(x, y);
       if (c.alphaQuantum() < 256) {
-        canvas->SetPixel(x + offset_x, y + offset_y,
-                         ScaleQuantumToChar(c.redQuantum()),
-                         ScaleQuantumToChar(c.greenQuantum()),
-                         ScaleQuantumToChar(c.blueQuantum()));
+        canvas->SetPixel(x + offset_x, y + offset_y, ScaleQuantumToChar(c.redQuantum()), ScaleQuantumToChar(c.greenQuantum()), ScaleQuantumToChar(c.blueQuantum()));
       }
     }
   }
 }
 
-int initLorenz(Lorenz *lorenz, vector<vector<float> > *grid) {
+int initLorenz(Lorenz &lorenz, vector<vector<float> > &grid) {
   int t = 0;
   while(t < 500) {
     lorenz.lorenz();
@@ -87,7 +86,7 @@ int initLorenz(Lorenz *lorenz, vector<vector<float> > *grid) {
             int z1 = lorenz.getZ();
             
             if (x1 >= 0 && x1 < 64 && z1 >= 0 && z1 < 64) {
-                grid[z1][x1] = 1;
+                grid[z1][x1] = 1.0f;
             }
         }
     }
@@ -95,60 +94,84 @@ int initLorenz(Lorenz *lorenz, vector<vector<float> > *grid) {
   return 1;
 }
 
-// main loop for drawing
-int render() {
+static void spotifyThread(Canvas *canvas) {
   Spotify spotify;
-  Lorenz lorenz;
-  vector<vector<float> > grid(64, vector<float>(64));
 
-  initLorenz(&lorenz, &grid);
+  canvas->Clear();
 
   while(!interrupt_received) {
-    int updated = spotify.update();
+
+
+    bool updated = spotify.update();
+    spotify_playing = spotify.isPlaying();
+
+    cout << spotify_playing << endl;
+
     
-  if(spotify.isPlaying() && updated) {
-    // load the image
-    ImageVector image = LoadImageAndScaleImage("./tmp/spotify.png", 64, 64);
-    CopyImageToCanvas(image[0], canvas);
-
-    sleep(4);
-    continue;
-  }
-
-  // draw the lorenz attractor
-  lorenz.generateFrames(grid);
-  for (int i = 0; i < 64; i++) {
-    for (int j = 0; j < 64; j++) {
-      
-      // get the grid value and convert it to a color simialr to the state machine
-      float value = grid[x][y];
-
-      float r = 255 * powf(value, 4 + (value * 0.5)) * cosf(value);
-      float g = 255 * powf(value, 3 + (value * 0.5)) * sinf(value);
-      float b = 255 * powf(value, 2 + (value * 0.5));
-      
-      canvas->SetPixel(x, y, r, g, b);
-
-      
-      if (x1 >= 0 && x1 < 64 && z1 >= 0 && z1 < 64) {
-          grid[z1][x1] = 1;
-      }
-
-      canvas->SetPixel(x, y, r, g, b);
+    if(spotify_playing) {
+      std::lock_guard<std::mutex> guard(canvas_mutex);
+      // load the image
+      ImageVector image = LoadImageAndScaleImage("./tmp/spotify.png", 64, 64);    
+      canvas->Clear();
+      CopyImageToCanvas(image[0], canvas);
+      sleep(4);
     }
-  }
-
-  usleep(40000);
+    sleep(10);
   }
 }
 
+// main loop for drawing
+int render(Canvas *canvas) {
+  Lorenz lorenz;
+  vector<vector<float> > grid(64, vector<float>(64));
+
+  initLorenz(lorenz, grid);
+
+  thread spotify_thread(spotifyThread, canvas);
+  sleep(3);
+
+  int i = 0;
+  while(!interrupt_received) {
+
+    if(spotify_playing) {
+      usleep(10000);
+      continue;
+    }
+
+    cout << spotify_playing << endl;
+
+    
+    // draw the lorenz attractor
+    lorenz.generateFrames(grid);
+
+    for(int x = 0; x < 64; x++) {     
+      for(int y = 0; y < 64; y++) {
+        // get the grid value and convert it to a color simialr to the state machine
+        float value = grid[x][y];
+
+        float r = 255 * powf(value, 4 + (value * 0.5)) * cosf(value);
+        float g = 255 * powf(value, 3 + (value * 0.5)) * sinf(value);
+        float b = 255 * powf(value, 2 + (value * 0.5));
+        
+        canvas->SetPixel(x, y, r, g, b);
+      }
+    }
+    usleep(33333);
+  }
+  canvas->Clear();
+  spotify_thread.join();
+  return 1;
+}
+
+
 
 int main(int argc, char *argv[]) {
+  Magick::InitializeMagick(*argv);
   RGBMatrix::Options defaults;
   defaults.hardware_mapping = "adafruit-hat-pwm";  // or e.g. "adafruit-hat"
   defaults.rows = 64;
   defaults.cols = 64;
-  defaults.brightness = 80;
+  defaults.brightness = 95;
 
   Canvas *canvas = RGBMatrix::CreateFromFlags(&argc, &argv, &defaults);
   if (canvas == NULL)
@@ -160,10 +183,8 @@ int main(int argc, char *argv[]) {
   signal(SIGTERM, InterruptHandler);
   signal(SIGINT, InterruptHandler);
 
-  DrawOnCanvas(canvas);    // Using the canvas.
+  render(canvas);    // Using the canvas.
 
-  // Animation finished. Shut down the RGB matrix.
-  canvas->Clear();
   delete canvas;
 
   return 0;
