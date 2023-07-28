@@ -45,6 +45,10 @@ spotify: src/spotify.o tests/testspotify.o $(RGB_LIBRARY)
 src/spotify.o: src/spotify.cc
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
+
+boids : src/boids.o tests/testboids.o 
+	$(CXX) $(CXXFLAGS) -I src/boids tests/testboids.o -o $@ $<
+
 lorenz : $(TEST_OBJECTS2) $(SOURCE_OBJECTS) $(RGB_LIBRARY)
 	$(CXX) $(CXXFLAGS) -I$(RGB_INCDIR) $(TEST_OBJECTS2) $(SOURCE_OBJECTS) -o $@ $(LDFLAGS)
 

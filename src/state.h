@@ -6,6 +6,7 @@
 #include <chrono>
 #include <nlohmann/json.hpp>
 
+// The UsE oF nAmEsPaCeS iS cOnSiDeReD bAd PrAcTiCe
 using json = nlohmann::json;
 using namespace std;
 
@@ -34,6 +35,11 @@ class State {
             }
             return copyGrid;
         }
+
+        // helper function for dthe manhattan distance
+        int distance(int x1, int y1, int x2, int y2) {
+            return sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
+        }
 };
 
 class Lorenz : public State {
@@ -54,6 +60,38 @@ class Lorenz : public State {
         float getX();
         float getY();
         float getZ();
+};
+
+class Boid {
+    public:
+        int x;
+        int y;
+        float vx;
+        float vy;
+
+        Boid(int x, int y, float vx, float vy);
+        void init();
+        // int x();
+        // int y();
+        // int vx();
+        // int vy();
+        // void x(int x);
+        // void y(int y);
+        // void vx(int vx);
+        // void vy(int vy);
+
+        float separation();
+        float alignment();
+        float cohesion();
+
+
+};
+
+class Flock : public State {
+    public:
+        vector<Boid> flock;
+        Flock();
+        void generateFrames(vector<vector<float>>& grid) override;
 };
 
 class Wave : public State {
