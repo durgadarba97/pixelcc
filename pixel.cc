@@ -13,6 +13,7 @@
 #include <mutex>
 #include <atomic>
 
+
 using ImageVector = std::vector<Magick::Image>;
 using rgb_matrix::RGBMatrix;
 using rgb_matrix::Canvas;
@@ -98,14 +99,17 @@ static void spotifyThread(Canvas *canvas) {
   Spotify spotify;
 
   canvas->Clear();
+  bool updated = false;
 
   while(!interrupt_received) {
 
-
-    bool updated = spotify.update();
-    spotify_playing = spotify.isPlaying();
-
-    cout << spotify_playing << endl;
+    try {
+        updated = spotify.update();
+        spotify_playing = spotify.isPlaying();
+    } catch (const json::type_error& e){
+      cerr << "Caught type_error: " << e.what() << endl;
+      sleep(5);
+    }
 
     
     if(spotify_playing) {
@@ -130,7 +134,6 @@ int render(Canvas *canvas) {
   thread spotify_thread(spotifyThread, canvas);
   sleep(3);
 
-  int i = 0;
   while(!interrupt_received) {
 
     if(spotify_playing) {
@@ -138,9 +141,6 @@ int render(Canvas *canvas) {
       continue;
     }
 
-    cout << spotify_playing << endl;
-
-    
     // draw the lorenz attractor
     lorenz.generateFrames(grid);
 

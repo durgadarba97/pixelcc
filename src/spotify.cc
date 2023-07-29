@@ -4,8 +4,8 @@
 #include <nlohmann/json.hpp>
 #include <fstream>
 #include <chrono>
-#include "spotify.h"
 #include <unistd.h>
+#include "spotify.h"
 
 
 using namespace std;
@@ -50,15 +50,17 @@ json defaultRes() {
 
 Spotify::Spotify() {
     // read these from .config
-    ifstream f(".config");
     json tojson;
+    ifstream f(".config");
 
     f >> tojson;
+    f.close();
     client_id = tojson["client_id"];
     client_secret = tojson["client_secret"];
     redirect_url = tojson["redirect_url"];
     refresh_token = tojson["refresh_token"];;
     current_state = defaultRes();
+    
 
     authorize();
 }
