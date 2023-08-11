@@ -57,7 +57,7 @@ int lorenz(Canvas *canvas) {
         }
 
         // 30 frames per second
-        usleep(40000);
+        usleep(50000);
     }
     return 0;
 }

@@ -12,6 +12,9 @@
 #include <iostream>
 #include <mutex>
 #include <atomic>
+#include <nlohmann/json.hpp>
+#include <chrono>
+#include <ctime>  
 
 using ImageVector = std::vector<Magick::Image>;
 using rgb_matrix::RGBMatrix;
@@ -94,6 +97,24 @@ int initLorenz(Lorenz &lorenz, vector<vector<float> > &grid) {
   return 1;
 }
 
+int initWave(Wave& wave, vector<vector<float> > &grid) {
+  srand(unsigned(time(0)));
+
+  // how busy we want the screen. between 0.5 and .65
+  float how_busy = (float)rand() / ((float)RAND_MAX) * 0.20 + 0.45;
+  cout << how_busy << endl;
+  for(int x = 0; x < 64; x++) {
+      for(int y = 0; y < 64; y++) {
+        grid[x][y] = 0;
+        
+        if((float)rand() / ((float)RAND_MAX) > how_busy) {
+          grid[x][y] = (float)rand() / ((float)RAND_MAX+1.0);
+        } 
+      }
+  }
+  return 1;
+}
+
 static void spotifyThread(Canvas *canvas) {
   Spotify spotify;
 
@@ -101,20 +122,34 @@ static void spotifyThread(Canvas *canvas) {
 
   while(!interrupt_received) {
 
+    try {
+      bool updated = spotify.update();
+      spotify_playing = spotify.isPlaying();
 
-    bool updated = spotify.update();
-    spotify_playing = spotify.isPlaying();
+    } catch(const json::type_error& e) {
+      spotify_playing = false;
+      sleep(5);
+      continue;
+    }
 
-    cout << spotify_playing << endl;
+    // cout << spotify_playing << endl;
 
     
     if(spotify_playing) {
       std::lock_guard<std::mutex> guard(canvas_mutex);
       // load the image
-      ImageVector image = LoadImageAndScaleImage("./tmp/spotify.png", 64, 64);    
-      canvas->Clear();
-      CopyImageToCanvas(image[0], canvas);
-      sleep(4);
+      try {
+        ImageVector image = LoadImageAndScaleImage("./tmp/spotify.png", 64, 64);    
+        canvas->Clear();
+        CopyImageToCanvas(image[0], canvas);
+        sleep(4);
+
+      } catch (std::exception& e) {
+        std::cerr << "Caught Magick error: " << e.what() << std::endl;
+        spotify_playing = false;
+        sleep(10);
+      }
+
     }
     sleep(10);
   }
@@ -122,10 +157,11 @@ static void spotifyThread(Canvas *canvas) {
 
 // main loop for drawing
 int render(Canvas *canvas) {
-  Lorenz lorenz;
+  Wave wave;
   vector<vector<float> > grid(64, vector<float>(64));
-
-  initLorenz(lorenz, grid);
+  
+  initWave(wave, grid);
+  time_t start_time = time(0);
 
   thread spotify_thread(spotifyThread, canvas);
   sleep(3);
@@ -138,16 +174,22 @@ int render(Canvas *canvas) {
       continue;
     }
 
-    cout << spotify_playing << endl;
+    time_t curr_time = time(0);
 
-    
+    if(curr_time - start_time >= 7200) {
+        cout << "reinitializing..." << endl;
+        initWave(wave, grid);
+        start_time = time(0);
+    }
+
     // draw the lorenz attractor
-    lorenz.generateFrames(grid);
+    wave.generateFrames(grid);
 
     for(int x = 0; x < 64; x++) {     
       for(int y = 0; y < 64; y++) {
         // get the grid value and convert it to a color simialr to the state machine
-        float value = grid[x][y];
+
+        float value = grid[y][x];
 
         float r = 255 * powf(value, 4 + (value * 0.5)) * cosf(value);
         float g = 255 * powf(value, 3 + (value * 0.5)) * sinf(value);
@@ -156,8 +198,9 @@ int render(Canvas *canvas) {
         canvas->SetPixel(x, y, r, g, b);
       }
     }
-    usleep(33333);
+    usleep(50000);
   }
+
   canvas->Clear();
   spotify_thread.join();
   return 1;

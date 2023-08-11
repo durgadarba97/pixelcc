@@ -16,7 +16,9 @@ void Wave::wave(std::vector<std::vector<float> > &grid) {
 
             // grid[i][j] = lastValue * (0.96 + 0.02 * (float)rand() / (float)RAND_MAX);
             grid[i][j] = lastValue * (0.96 + 0.02 * (float)rand() / (float)RAND_MAX);
-            if(lastValue <= (0.18 + 0.04 * (float)rand() / (float)RAND_MAX)) {
+
+            // if(lastValue <= (0.18 + 0.04 * (float)rand() / (float)RAND_MAX))
+            if(lastValue <= (0.15 + 0.04 * (float)rand() / (float)RAND_MAX)) {
                 int n = 0;
 
                 // in a moving window of 3x3,

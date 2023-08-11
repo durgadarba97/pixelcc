@@ -75,7 +75,7 @@ int wave(Canvas *canvas) {
         }
 
         // 30 frames per second
-        usleep(40000);
+        usleep(33333);
     }
     cout << "wave created" << endl;
 }
