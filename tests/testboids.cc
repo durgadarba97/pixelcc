@@ -47,4 +47,3 @@ int main(int argc, char *argv[]){
     boid(canvas);    // Using the canvas.
     return 0;
 }
-

@@ -18,6 +18,8 @@ class State {
     protected:
         const int ROWS = 64;
         const int COLS = 64;
+        const float PI = 3.14159265358979323846;
+
 
         mt19937_64 rng;
         uniform_int_distribution<int> dist;
@@ -68,23 +70,19 @@ class Boid {
         int y;
         float vx;
         float vy;
+        float ax;
+        float ay;
 
-        Boid(int x, int y, float vx, float vy);
+        Boid(int x, int y, float vx, float vy, float ax, float ay) {
+            this->x = x;
+            this->y = y;
+            this->vx = vx;
+            this->vy = vy;
+            this->ax = ax;
+            this->ay = ay;
+        }
         void init();
-        // int x();
-        // int y();
-        // int vx();
-        // int vy();
-        // void x(int x);
-        // void y(int y);
-        // void vx(int vx);
-        // void vy(int vy);
-
-        float separation();
-        float alignment();
-        float cohesion();
-
-
+        void applyForce(float a_x, float a_y);
 };
 
 class Flock : public State {
@@ -92,6 +90,9 @@ class Flock : public State {
         vector<Boid> flock;
         Flock();
         void generateFrames(vector<vector<float>>& grid) override;
+        void separation(Boid& boid);
+        void alignment(Boid& boid);
+        void cohesion(Boid& boid);
 };
 
 class Wave : public State {
