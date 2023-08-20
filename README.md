@@ -6,31 +6,30 @@ https://www.adafruit.com/product/3649
 
 ## Dependencies ::
 RPI RGB Matrix Library : https://github.com/hzeller/rpi-rgb-led-matrix
-Spotify JSON LIBRARY : https://github.com/spotify/spotify-json
-    - still to be determined. not very out of the box friendly.
+JSON LIBRARY : https://github.com/nlohmann/json
 
 ## Notes ::
 The library was originally hacked together in Python (https://github.com/durgadarba97/pixel)
-but the performace with the Python library is not good, so I'm rewriting it in C++ so that it can be used in a more real-time environment. It also allows for more control over the LED matrix and animations in the future.
+but it had poor performnace. 
 
+spotify.cc - usign the json library to get album covers of the currently playing song on spotify
+lorenz.cc - the wave animation + "bug" (lorenz attractor) 
+wave.cc - wave animation inspired by u/knifa 
+
+Insipired by the rust project : https://www.reddit.com/r/raspberry_pi/comments/hxlk9c/been_working_on_this_led_matrix_display_project/
 
 ## TO DO ::
-    - Queue
-        - Sigfault error when trying to add to queue
-
-    - Spotify 
-        - learning how to use the nlohmann json library
+    - Queue 
+        - Add a queue to string together animations.
     
     - Animations
+        - Color class to transition along HSV : 
+            https://www.masterclass.com/articles/how-to-use-hsv-color-model-in-photography
+            https://web.cs.uni-paderborn.de/cgvb/colormaster/web/color-systems/hsv.html
         - Conways Game of Life
         - Snake
         - Maze Generators
-        - Transitioning between animations
-    
-    - Other
-        -Clean up Makefile
         
-terminate called after throwing an instance of 'nlohmann::json_abi_v3_11_2::detail::type_error'
-  what():  [json.exception.type_error.302] type must be string, but is null
-Magick: abort due to signal 6 (SIGABRT) "Abort"...
-Aborted
+    - Other
+        - CLEAN UP MAKEFILE 
+        - AND TEST FILE!
