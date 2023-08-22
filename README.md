@@ -34,7 +34,7 @@ Insipired by the rust project : https://www.reddit.com/r/raspberry_pi/comments/h
         - CLEAN UP MAKEFILE 
         - AND TEST FILE!
 
-## Examples:
+## Examples::
 I got the Spotify integration to work! When I play a song, on my phone, laptop etc. it automatically gets the album cover, 
 downsamples the color to a 64x64 grid and displays it:
 
